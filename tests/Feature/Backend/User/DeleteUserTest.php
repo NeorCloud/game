@@ -27,7 +27,7 @@ class DeleteUserTest extends TestCase
 
         $this->logout();
 
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->admin()->create());
 
         $response = $this->get('/admin/auth/user/deleted');
 

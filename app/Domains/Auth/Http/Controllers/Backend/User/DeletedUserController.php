@@ -2,6 +2,7 @@
 
 namespace App\Domains\Auth\Http\Controllers\Backend\User;
 
+use App\Domains\Auth\Http\Requests\Backend\User\DeletedUsersRequest;
 use App\Domains\Auth\Models\User;
 use App\Domains\Auth\Services\UserService;
 
@@ -28,7 +29,7 @@ class DeletedUserController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(DeletedUsersRequest $request)
     {
         return view('backend.auth.user.deleted');
     }
@@ -39,7 +40,7 @@ class DeletedUserController
      *
      * @throws \App\Exceptions\GeneralException
      */
-    public function update(User $deletedUser)
+    public function update(DeletedUsersRequest $request, User $deletedUser)
     {
         $this->userService->restore($deletedUser);
 
@@ -52,7 +53,7 @@ class DeletedUserController
      *
      * @throws \App\Exceptions\GeneralException
      */
-    public function destroy(User $deletedUser)
+    public function destroy(DeletedUsersRequest $request, User $deletedUser)
     {
         abort_unless(config('boilerplate.access.user.permanently_delete'), 404);
 
