@@ -42,7 +42,7 @@ class ChangeUserPasswordTest extends TestCase
         $newUser = User::factory()->create();
 
         $response = $this->patch('/admin/auth/user/'.$newUser->id.'/password/change', [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
+            'new_password' => 'OC4Nzu270N!QBVi%U%qX',
             'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
         ]);
 
@@ -51,7 +51,7 @@ class ChangeUserPasswordTest extends TestCase
         $user->syncPermissions([]);
 
         $response = $this->patch('/admin/auth/user/'.$newUser->id.'/password/change', [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
+            'new_password' => 'OC4Nzu270N!QBVi%U%qX',
             'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
         ]);
 
@@ -66,11 +66,11 @@ class ChangeUserPasswordTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->patch("/admin/auth/user/{$user->id}/password/change", [
-            'password' => '1234567',
+            'new_password' => '1234567',
             'password_confirmation' => '1234567',
         ]);
 
-        $response->assertSessionHasErrors('password');
+        $response->assertSessionHasErrors('new_password');
     }
 
     /** @test */
@@ -81,11 +81,11 @@ class ChangeUserPasswordTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->patch("/admin/auth/user/{$user->id}/password/change", [
-            'password' => 'Boilerplate',
+            'new_password' => 'Boilerplate',
             'password_confirmation' => 'Boilerplate01',
         ]);
 
-        $response->assertSessionHasErrors('password');
+        $response->assertSessionHasErrors('new_password');
     }
 
     /** @test */
@@ -117,8 +117,8 @@ class ChangeUserPasswordTest extends TestCase
 
         $admin = $this->getMasterAdmin();
 
-        $response = $this->patch('/admin/auth/user/'.$admin->id.'/password/change', [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
+        $response = $this->patch('/admin/auth/user/' . $admin->id . '/password/change', [
+            'new_password' => 'OC4Nzu270N!QBVi%U%qX',
             'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
         ]);
 
@@ -128,55 +128,12 @@ class ChangeUserPasswordTest extends TestCase
 
         $this->loginAsAdmin();
 
-        $response = $this->patch('/admin/auth/user/'.$admin->id.'/password/change', [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
+        $response = $this->patch('/admin/auth/user/' . $admin->id . '/password/change', [
+            'new_password' => 'OC4Nzu270N!QBVi%U%qX',
             'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
         ]);
 
         $response->assertSessionHas('flash_success', __('The user\'s password was successfully updated.'));
         $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX', $admin->fresh()->password));
-    }
-
-    /** @test */
-    public function an_admin_can_use_the_same_password_when_history_is_off_on_backend_user_password_change()
-    {
-        config(['boilerplate.access.user.password_history' => false]);
-
-        $this->loginAsAdmin();
-
-        $user = User::factory()->create(['password' => 'OC4Nzu270N!QBVi%U%qX']);
-
-        $response = $this->patch("/admin/auth/user/{$user->id}/password/change", [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
-            'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
-        ]);
-
-        $response->assertSessionHas('flash_success', __('The user\'s password was successfully updated.'));
-        $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX', $user->fresh()->password));
-    }
-
-    /** @test */
-    public function an_admin_can_not_use_the_same_password_when_history_is_on_on_backend_user_password_change()
-    {
-        config(['boilerplate.access.user.password_history' => 3]);
-
-        $this->loginAsAdmin();
-
-        $user = User::factory()->create(['password' => 'OC4Nzu270N!QBVi%U%qX']);
-
-        $this->patch("/admin/auth/user/{$user->id}/password/change", [
-            'password' => 'OC4Nzu270N!QBVi%U%qX_02',
-            'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX_02',
-        ]);
-
-        $response = $this->patch("/admin/auth/user/{$user->id}/password/change", [
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
-            'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
-        ]);
-
-        $response->assertSessionHasErrors();
-        $errors = session('errors');
-        $this->assertSame($errors->get('password')[0], __('You can not set a password that you have previously used within the last 3 times.'));
-        $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX_02', $user->fresh()->password));
     }
 }

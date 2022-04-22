@@ -14,7 +14,7 @@
             </x-slot>
 
             <x-slot name="body">
-                @if(! $logged_in_user->can('admin.access.user') || ($user->id == $logged_in_user->id && !$logged_in_user->isMasterAdmin()))
+                @if(! $logged_in_user->can('admin.access.user.change-password') || ($user->id == $logged_in_user->id && !$logged_in_user->isMasterAdmin()))
                     <div class="form-group row">
                         <label for="old_password" class="col-md-2 col-form-label">@lang('Old Password')</label>
 

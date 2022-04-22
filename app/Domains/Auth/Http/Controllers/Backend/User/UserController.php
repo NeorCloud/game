@@ -3,6 +3,7 @@
 namespace App\Domains\Auth\Http\Controllers\Backend\User;
 
 use App\Domains\Auth\Http\Requests\Backend\User\ChangeAvatarRequest;
+use App\Domains\Auth\Http\Requests\Backend\User\CreateUserRequest;
 use App\Domains\Auth\Http\Requests\Backend\User\DeleteUserRequest;
 use App\Domains\Auth\Http\Requests\Backend\User\EditUserRequest;
 use App\Domains\Auth\Http\Requests\Backend\User\StoreUserRequest;
@@ -57,7 +58,7 @@ class UserController
     /**
      * @return mixed
      */
-    public function create()
+    public function create(CreateUserRequest $request)
     {
         return view('backend.auth.user.create')
             ->withRoles($this->roleService->get())

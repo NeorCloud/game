@@ -27,10 +27,10 @@ class UpdateUserPasswordRequest extends FormRequest
         if ($this->user->id == $this->user()->id) {
             return true;
         }
-        if ($this->user->can('admin.access.user') && ! $this->user()->isMasterAdmin()) {
+        if ($this->user->can('admin.access.user.change-password') && ! $this->user()->isMasterAdmin()) {
             return false;
         }
-        if ($this->user()->can('admin.access.user')) {
+        if ($this->user()->can('admin.access.user.change-password')) {
             return true;
         }
 
@@ -59,10 +59,10 @@ class UpdateUserPasswordRequest extends FormRequest
                 'same:password_confirmation',
             ],
             'old_password' => [
-                Rule::requiredIf(! $this->user()->can('admin.access.user') || ($this->user->id == $this->user()->id && ! $this->user()->isMasterAdmin())),
+                Rule::requiredIf(! $this->user()->can('admin.access.user.change-password') || ($this->user->id == $this->user()->id && ! $this->user()->isMasterAdmin())),
             ],
             'password_confirmation' => [
-                'required',
+                'required', 'same:new_password',
             ],
         ];
     }
@@ -76,6 +76,9 @@ class UpdateUserPasswordRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new AuthorizationException(__('Only the administrator can change their password.'));
+        if ($this->user->isMasterAdmin() && $this->user()->id != $this->user->id) {
+            throw new AuthorizationException(__('Only the administrator can change their password.'));
+        }
+        throw new AuthorizationException(__('You do not have access to do that.'));
     }
 }

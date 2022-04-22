@@ -19,7 +19,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('admin.access.user');
     }
 
     /**

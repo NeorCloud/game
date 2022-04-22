@@ -228,6 +228,10 @@ class UserService extends BaseService
             $user->password_changed_at = now();
         }
 
+        throw_if($data['new_password'] !== $data['password_confirmation'],
+            new GeneralException(__('Those passwords don\'t match.'))
+        );
+
         $user->password = $data['new_password'];
 
         return tap($user)->update();
