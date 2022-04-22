@@ -33,6 +33,36 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.',], function () {
             Route::delete('permanently-delete', [DeletedUserController::class, 'destroy'])->name('permanently-delete');
         });
 
+
+        Route::group([], function () {
+            Route::get('deactivated', [DeactivatedUserController::class, 'index'])
+                ->name('deactivated')
+                ->middleware('permission:admin.access.user.reactivate')
+                ->breadcrumbs(function (Trail $trail) {
+                    $trail->parent('admin.auth.user.index')
+                        ->push(__('Deactivated Users'), route('admin.auth.user.deactivated'));
+                });
+
+            Route::get('/', [UserController::class, 'index'])
+                ->name('index')
+                ->middleware('permission:admin.access.user.list|admin.access.user.deactivate|admin.access.user.clear-session|admin.access.user.impersonate|admin.access.user.change-password')
+                ->breadcrumbs(function (Trail $trail) {
+                    $trail->parent('admin.dashboard')
+                        ->push(__('User Management'), route('admin.auth.user.index'));
+                });
+
+            Route::group(['prefix' => '{user}'], function () {
+
+                Route::patch('mark/{status}', [DeactivatedUserController::class, 'update'])
+                    ->name('mark')
+                    ->where(['status' => '[0,1]'])
+                    ->middleware('permission:admin.access.user.deactivate|admin.access.user.reactivate');
+
+                Route::post('clear-session', [UserSessionController::class, 'update'])
+                    ->name('clear-session')
+                    ->middleware('permission:admin.access.user.clear-session');
+            });
+        });
         Route::group(['prefix' => '{user}'], function () {
             Route::get('edit', [UserController::class, 'edit'])
                 ->name('edit')
@@ -68,38 +98,6 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.',], function () {
             Route::patch('password/change', [UserPasswordController::class, 'update'])
                 ->name('change-password.update');
             Route::delete('/', [UserController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group([
-            'middleware' => 'permission:admin.access.user.list|admin.access.user.deactivate|admin.access.user.reactivate|admin.access.user.clear-session|admin.access.user.impersonate|admin.access.user.change-password',
-        ], function () {
-            Route::get('deactivated', [DeactivatedUserController::class, 'index'])
-                ->name('deactivated')
-                ->middleware('permission:admin.access.user.reactivate')
-                ->breadcrumbs(function (Trail $trail) {
-                    $trail->parent('admin.auth.user.index')
-                        ->push(__('Deactivated Users'), route('admin.auth.user.deactivated'));
-                });
-
-            Route::get('/', [UserController::class, 'index'])
-                ->name('index')
-                ->middleware('permission:admin.access.user.list|admin.access.user.deactivate|admin.access.user.clear-session|admin.access.user.impersonate|admin.access.user.change-password')
-                ->breadcrumbs(function (Trail $trail) {
-                    $trail->parent('admin.dashboard')
-                        ->push(__('User Management'), route('admin.auth.user.index'));
-                });
-
-            Route::group(['prefix' => '{user}'], function () {
-
-                Route::patch('mark/{status}', [DeactivatedUserController::class, 'update'])
-                    ->name('mark')
-                    ->where(['status' => '[0,1]'])
-                    ->middleware('permission:admin.access.user.deactivate|admin.access.user.reactivate');
-
-                Route::post('clear-session', [UserSessionController::class, 'update'])
-                    ->name('clear-session')
-                    ->middleware('permission:admin.access.user.clear-session');
-            });
         });
     });
 
