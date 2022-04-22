@@ -39,14 +39,14 @@ class UpdateUserTest extends TestCase
 
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
-            'type' => User::TYPE_ADMIN,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
         ]);
 
         $this->patch("/admin/auth/user/{$user->id}", [
-            'type' => User::TYPE_ADMIN,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
             'roles' => [
                 Role::whereName(config('boilerplate.access.role.admin'))->first()->id,
@@ -55,8 +55,8 @@ class UpdateUserTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'type' => User::TYPE_ADMIN,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
         ]);
 
@@ -95,18 +95,21 @@ class UpdateUserTest extends TestCase
 
         $this->assertDatabaseMissing('users', [
             'id' => $admin->id,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
         ]);
 
         $this->patch("/admin/auth/user/{$admin->id}", [
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
         ]);
 
         $this->assertDatabaseHas('users', [
             'id' => $admin->id,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
         ]);
 
@@ -121,7 +124,8 @@ class UpdateUserTest extends TestCase
 
         $response = $this->patch("/admin/auth/user/{$admin->id}", [
             'id' => $admin->id,
-            'name' => 'Changed Name',
+            'first_name' => 'Changed',
+            'last_name' => 'Name',
             'email' => 'changed@example.com',
         ]);
 
@@ -129,7 +133,8 @@ class UpdateUserTest extends TestCase
 
         $this->assertDatabaseMissing('users', [
             'id' => $admin->id,
-            'name' => 'Changed Name',
+            'first_name' => 'Changed',
+            'last_name' => 'Name',
             'email' => 'changed@example.com',
         ]);
     }
@@ -165,19 +170,22 @@ class UpdateUserTest extends TestCase
     {
         $this->actingAs(User::factory()->admin()->create());
 
-        $user = User::factory()->admin()->create(['name' => 'John Doe']);
+        $user = User::factory()->admin()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ]);
 
         $response = $this->patch("/admin/auth/user/{$user->id}", [
-            'type' => User::TYPE_USER,
-            'name' => 'Jane Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
         ]);
 
         $response->assertSessionHas('flash_danger', __('You do not have access to do that.'));
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'type' => User::TYPE_ADMIN,
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
         ]);
     }
 }

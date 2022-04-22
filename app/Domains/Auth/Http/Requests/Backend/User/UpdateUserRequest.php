@@ -66,6 +66,9 @@ class UpdateUserRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new AuthorizationException(__('Only the administrator can update this user.'));
+        if ($this->user->isMasterAdmin() && $this->user()->id != $this->user->id) {
+            throw new AuthorizationException(__('Only the administrator can update this user.'));
+        }
+        throw new AuthorizationException(__('You do not have access to do that.'));
     }
 }
