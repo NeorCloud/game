@@ -8,10 +8,13 @@ use Tests\TestCase;
 
 /**
  * Class ChangePasswordTest.
+ * frontend tests
  */
 class ChangePasswordTest extends TestCase
 {
-    /** @test */
+    /**
+     * @stunTest
+     */
     public function change_password_requires_validation()
     {
         $this->actingAs(User::factory()->create());
@@ -21,7 +24,7 @@ class ChangePasswordTest extends TestCase
         $response->assertSessionHasErrors(['current_password', 'password']);
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_can_change_their_password()
     {
         $user = User::factory()->create(['password' => '1234']);
@@ -38,7 +41,7 @@ class ChangePasswordTest extends TestCase
         $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX', $user->fresh()->password));
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_can_use_the_same_password_when_history_is_off_on_account_change_password()
     {
         config(['boilerplate.access.user.password_history' => false]);
@@ -56,7 +59,7 @@ class ChangePasswordTest extends TestCase
         $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX_02', $user->fresh()->password));
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_can_not_use_the_same_password_when_history_is_on_on_account_change_password()
     {
         config(['boilerplate.access.user.password_history' => 3]);
@@ -87,7 +90,7 @@ class ChangePasswordTest extends TestCase
         $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX_02', $user->fresh()->password));
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_can_reuse_a_password_after_it_surpasses_the_limit()
     {
         config(['boilerplate.access.user.password_history' => 2]);

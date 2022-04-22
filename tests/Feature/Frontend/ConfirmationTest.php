@@ -7,10 +7,11 @@ use Tests\TestCase;
 
 /**
  * Class ConfirmationTest.
+ * no more confirm is in the app
  */
 class ConfirmationTest extends TestCase
 {
-    /** @test */
+    /** @stunTest */
     public function a_user_can_access_the_confirm_password_page()
     {
         $user = User::factory()->create();

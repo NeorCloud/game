@@ -23,7 +23,7 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post('/register');
 
-        $response->assertSessionHasErrors(['name', 'email', 'password', 'terms']);
+        $response->assertSessionHasErrors(['first_name', 'last_name', 'email', 'password', 'terms']);
     }
 
     /** @test */
@@ -45,7 +45,8 @@ class RegistrationTest extends TestCase
     public function password_must_be_confirmed()
     {
         $response = $this->post('/register', [
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
             'password' => 'password',
         ]);
@@ -57,7 +58,8 @@ class RegistrationTest extends TestCase
     public function passwords_must_be_equivalent()
     {
         $response = $this->post('/register', [
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
             'password' => 'password',
             'password_confirmation' => 'not_the_same',
@@ -78,7 +80,8 @@ class RegistrationTest extends TestCase
     public function a_user_can_register_an_account()
     {
         $this->post('/register', [
-            'name' => 'John Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'email' => 'john@example.com',
             'password' => 'OC4Nzu270N!QBVi%U%qX',
             'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
@@ -89,7 +92,8 @@ class RegistrationTest extends TestCase
             ->where('email', 'john@example.com')
             ->firstOrFail();
 
-        $this->assertSame($user->name, 'John Doe');
+        $this->assertSame($user->first_name, 'John');
+        $this->assertSame($user->last_name, 'Doe');
         $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX', $user->password));
     }
 

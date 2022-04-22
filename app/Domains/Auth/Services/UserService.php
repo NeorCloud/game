@@ -327,7 +327,7 @@ class UserService extends BaseService
     protected function createUser(array $data = []): User
     {
         return $this->model::create([
-            'type' => $data['type'] ?? $this->model::TYPE_USER,
+            'type' => $data['type'] ?? $this->model::TYPE_ADMIN,
             'first_name' => $data['first_name'] ?? null,
             'last_name' => $data['last_name'] ?? null,
             'email' => $data['email'] ?? null,

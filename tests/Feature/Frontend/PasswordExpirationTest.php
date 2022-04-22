@@ -7,10 +7,11 @@ use Tests\TestCase;
 
 /**
  * Class PasswordExpirationTest.
+ * password will not expire in this version
  */
 class PasswordExpirationTest extends TestCase
 {
-    /** @test */
+    /** @stunTest */
     public function a_user_can_access_the_password_expired()
     {
         config(['boilerplate.access.user.password_expires_days' => 30]);
@@ -22,7 +23,7 @@ class PasswordExpirationTest extends TestCase
         $this->get('/password/expired')->assertOk();
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_with_an_expired_password_cannot_access_dashboard()
     {
         $user = User::factory()->passwordExpired()->create();
@@ -36,7 +37,7 @@ class PasswordExpirationTest extends TestCase
         ]));
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_with_an_expired_password_cannot_access_account()
     {
         $user = User::factory()->passwordExpired()->create();
@@ -50,7 +51,7 @@ class PasswordExpirationTest extends TestCase
         ]));
     }
 
-    /** @test */
+    /** @stunTest */
     public function password_expiration_update_requires_validation()
     {
         $this->actingAs(User::factory()->create());
@@ -60,7 +61,7 @@ class PasswordExpirationTest extends TestCase
         $response->assertSessionHasErrors(['current_password', 'password']);
     }
 
-    /** @test */
+    /** @stunTest */
     public function a_user_can_update_their_expired_password()
     {
         $user = User::factory()->passwordExpired()->create();
