@@ -116,7 +116,7 @@ class DeleteUserTest extends TestCase
 
         $response = $this->delete('/admin/auth/user/'.$admin->id);
 
-        $response->assertSessionHas('flash_danger', __('You can not delete the master administrator.'));
+        $response->assertSessionHas('flash_danger', __('You do not have access to do that.'));
 
         $this->assertDatabaseHas('users', ['id' => $admin->id, 'deleted_at' => null]);
     }
@@ -138,7 +138,7 @@ class DeleteUserTest extends TestCase
     /** @test */
     public function only_admin_can_delete_users()
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->admin()->create());
 
         $user = User::factory()->create();
 

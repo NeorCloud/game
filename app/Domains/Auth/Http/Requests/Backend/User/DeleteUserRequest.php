@@ -17,7 +17,7 @@ class DeleteUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return ! $this->user->isMasterAdmin();
+        return ! $this->user->isMasterAdmin() && $this->user()->can('admin.access.user');
     }
 
     /**
@@ -41,6 +41,6 @@ class DeleteUserRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new AuthorizationException(__('You can not delete the master administrator.'));
+        throw new AuthorizationException(__('You do not have access to do that.'));
     }
 }
