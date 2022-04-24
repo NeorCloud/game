@@ -2,9 +2,9 @@
 
 use App\Domains\Backups\Http\Controllers\BackupController;
 use App\Domains\Files\Http\Controllers\FileController;
+use App\Domains\Games\Http\Controllers\GameController;
 use App\Domains\Settings\Http\Controllers\SettingController;
 use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\GameController;
 use Tabuna\Breadcrumbs\Trail;
 
 // All route names are prefixed with 'admin.'.

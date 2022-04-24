@@ -15,19 +15,29 @@
             align-items: center;
             justify-content: center;
         }
+
         canvas {
             border: 1px solid white;
         }
     </style>
 </head>
 <body>
-<canvas width="400" height="400" id="game"></canvas>
+<div id="div">
+    <span style="color: white">Enter Your Nickname:</span>
+    <input type="text" id="name" autofocus>
+    <button type="button" id="button">start</button>
+</div>
+<canvas width="400" height="400" id="game" style="display: none;"></canvas>
 <script>
     var canvas = document.getElementById('game');
     var context = canvas.getContext('2d');
 
     var grid = 16;
     var count = 0;
+
+    // statistic variables
+    var eaten = 0;
+    var nickname = '';
 
     var snake = {
         x: 160,
@@ -49,7 +59,6 @@
     };
 
     // get random whole numbers in a specific range
-    // @see https://stackoverflow.com/a/1527820/2124254
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -59,30 +68,29 @@
         requestAnimationFrame(loop);
 
         // slow game loop to 15 fps instead of 60 (60/15 = 4)
-        if (++count < 4) {
+        // also we can calibrate it as the speed of snake
+        if (++count < 10) {
             return;
         }
 
         count = 0;
-        context.clearRect(0,0,canvas.width,canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // move snake by it's velocity
+        // move snake by its velocity
         snake.x += snake.dx;
         snake.y += snake.dy;
 
         // wrap snake position horizontally on edge of screen
         if (snake.x < 0) {
             snake.x = canvas.width - grid;
-        }
-        else if (snake.x >= canvas.width) {
+        } else if (snake.x >= canvas.width) {
             snake.x = 0;
         }
 
         // wrap snake position vertically on edge of screen
         if (snake.y < 0) {
             snake.y = canvas.height - grid;
-        }
-        else if (snake.y >= canvas.height) {
+        } else if (snake.y >= canvas.height) {
             snake.y = 0;
         }
 
@@ -96,14 +104,14 @@
 
         // draw apple
         context.fillStyle = 'red';
-        context.fillRect(apple.x, apple.y, grid-1, grid-1);
+        context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
 
         // draw snake one cell at a time
         context.fillStyle = 'green';
-        snake.cells.forEach(function(cell, index) {
+        snake.cells.forEach(function (cell, index) {
 
             // drawing 1 px smaller than the grid creates a grid effect in the snake body so you can see how long it is
-            context.fillRect(cell.x, cell.y, grid-1, grid-1);
+            context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
 
             // snake ate apple
             if (cell.x === apple.x && cell.y === apple.y) {
@@ -112,6 +120,7 @@
                 // canvas is 400x400 which is 25x25 grids
                 apple.x = getRandomInt(0, 25) * grid;
                 apple.y = getRandomInt(0, 25) * grid;
+                eaten++;
             }
 
             // check collision with all cells after this one (modified bubble sort)
@@ -119,12 +128,15 @@
 
                 // snake occupies same space as a body part. reset game
                 if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                    alert('Tnx for playing... Your score was:' + eaten);
+                    sendData(eaten);
                     snake.x = 160;
                     snake.y = 160;
                     snake.cells = [];
                     snake.maxCells = 4;
                     snake.dx = grid;
                     snake.dy = 0;
+                    eaten = 0;
 
                     apple.x = getRandomInt(0, 25) * grid;
                     apple.y = getRandomInt(0, 25) * grid;
@@ -134,7 +146,7 @@
     }
 
     // listen to keyboard events to move the snake
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         // prevent snake from backtracking on itself by checking that it's
         // not already moving on the same axis (pressing left while moving
         // left won't do anything, and pressing right while moving left
@@ -163,7 +175,29 @@
     });
 
     // start the game
-    requestAnimationFrame(loop);
+    document.getElementById("button").addEventListener("click", function () {
+        if (document.getElementById("name").value != '') {
+            nickname = document.getElementById("name").value;
+            document.getElementById("div").style.display = 'none';
+            document.getElementById("game").style.display = 'block';
+            requestAnimationFrame(loop);
+        } else {
+            alert('Enter Your Correct Nickname!Please!');
+        }
+    });
+
+    async function sendData(snake_eaten_number) {
+        await fetch('http://ngame.test/api/games/snake', {
+            method: 'POST',
+            body: JSON.stringify({
+                'nickname': nickname,
+                'score': snake_eaten_number,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
 </script>
 </body>
 </html>
