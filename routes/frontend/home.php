@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Games\Http\Controllers\GameController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\TermsController;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,11 @@ Route::get('terms', [TermsController::class, 'index'])
     ->breadcrumbs(function (Trail $trail) {
         $trail->parent('frontend.index')
             ->push(__('Terms & Conditions'), route('frontend.pages.terms'));
+    });
+
+Route::get('games/{game}', [GameController::class, 'run'])
+    ->name('games.show')
+    ->breadcrumbs(function (Trail $trail, $game) {
+        $trail->parent('frontend.index')
+            ->push($game->name, route('frontend.games.show', $game));
     });
