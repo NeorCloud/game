@@ -187,7 +187,7 @@
     });
 
     async function sendData(snake_eaten_number) {
-        await fetch('http://ngame.test/api/games/snake', {
+        await fetch('/api/games/snake', {
             method: 'POST',
             body: JSON.stringify({
                 'nickname': nickname,
