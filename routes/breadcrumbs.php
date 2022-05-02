@@ -38,3 +38,12 @@ Breadcrumbs::for('admin.files.create', function (Trail $trail) {
 Breadcrumbs::for('admin.backups.index', function (Trail $trail) {
     $trail->push(__('Databases'), route('admin.backups.index'));
 });
+
+//Games
+Breadcrumbs::for('admin.games.index', function (Trail $trail) {
+    $trail->push(__('Games Index'), route('admin.games.index'));
+});
+
+Breadcrumbs::for('admin.games.show', function (Trail $trail, $id) {
+    $trail->parent('admin.games.index')->push(__('Games Show'), route('admin.games.show', $id));
+});

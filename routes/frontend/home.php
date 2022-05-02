@@ -24,7 +24,7 @@ Route::get('terms', [TermsController::class, 'index'])
     });
 
 Route::get('games/{game}', [GameController::class, 'run'])
-    ->name('games.show')
+    ->name('games.run')
     ->breadcrumbs(function (Trail $trail, $game) {
         $trail->parent('frontend.index')
             ->push($game->name, route('frontend.games.show', $game));

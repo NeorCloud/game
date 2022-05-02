@@ -187,7 +187,7 @@
     });
 
     async function sendData(snake_eaten_number) {
-        await fetch('/api/games/snake', {
+        await fetch('/api/games/1', {
             method: 'POST',
             body: JSON.stringify({
                 'nickname': nickname,

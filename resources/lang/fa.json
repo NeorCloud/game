@@ -247,5 +247,12 @@
     "must be storage or gravatar": "باید بارگذاری یا گراواتار باشد",
     "Edit Avatar": "ویرایش آواتار",
     "Gravatar": "گراواتار",
-    "Avatar format": "فرمت عکس باید jpg یا png یا jpeg باشد."
+    "Avatar format": "فرمت عکس باید jpg یا png یا jpeg باشد.",
+    "Games Index": "بازی ها",
+    "Games": "بازی ها",
+    "Games Show": "نمایش بازی",
+    "Leaderboard": "جدول قهرمانان",
+    "Nickname": "اسم مستعار",
+    "Score": "امتیاز",
+    "Duration":  "مدت"
 }

@@ -38,8 +38,10 @@ Route::group(['middleware' => 'check_backup_permission', 'prefix' => 'backups', 
 });
 
 //todo add permissions
-Route::get('games', [GameController::class, 'index'])->name('games.index')
-    ->breadcrumbs(function (Trail $trail) {
-        $trail->push(__('Games'), route('admin.games.index'));
-    });
-Route::get('games/{game}/run', [GameController::class, 'run'])->name('games.run');
+Route::group(['prefix' => 'games', 'as' => 'games.'], function () {
+    Route::get('index2list', [GameController::class, 'index2list']);
+    Route::get('', [GameController::class, 'index'])->name('index');
+    Route::get('/index2list', [GameController::class, 'index2list'])->name('list');
+    Route::get('/{game}', [GameController::class, 'show'])->name('show');
+    Route::get('/{game}/leaderboard', [GameController::class, 'leaderboard'])->name('leaderboard');
+});

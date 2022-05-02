@@ -18,17 +18,10 @@
                         <th></th>
                         <th>@lang('ID')</th>
                         <th>@lang('Title')</th>
+                        <th>@lang('Created At')</th>
                         <th>@lang('Actions')</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td>1</td>
-                        <td>Snake</td>
-                        <td><a href="{{route('admin.games.run', 'snake')}}" class="btn btn-primary"><i class="fas fa-eye"></i></a></td>
-                    </tr>
-                    </tbody>
                 </table>
             </div>
         </x-slot>
@@ -46,6 +39,21 @@
                     }
                 },
                 order: [1, 'asc'],
+                ajax: '{{ url('/admin/games/index2list') }}',
+                columns: [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'control',
+                        orderable: false,
+                        targets: 0,
+                        searchable: false
+                    },
+                    {data: 'id', name: 'id'},
+                    {data: 'title', name: 'title'},
+                    {data: 'created_at', name: 'created_at', searchable: false},
+                    {data: 'action', name: 'action', searchable: false, sortable: false},
+                ],
                 @include('backend.includes.dtTranslate')
             });
         });

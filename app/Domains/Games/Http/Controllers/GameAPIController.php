@@ -2,9 +2,9 @@
 
 namespace App\Domains\Games\Http\Controllers;
 
+use App\Domains\Games\Models\Game;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class GameAPIController extends Controller
 {
@@ -31,21 +31,24 @@ class GameAPIController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Game $game
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
      */
-    public function store(Request $request, $game)
+    public function store(Request $request, Game $game)
     {
         $request->validate([
             'nickname' => 'required|string|max:255',
             'score' => 'required|integer',
         ]);
-        if ($game == 'snake'){
-            Log::info('game: ' . $game, ['nickname' => $request->nickname, 'score' => $request->score, 'ip' => $request->ip(), 'user_agent' => $request->userAgent()]);
-            return response()->json(['message' => 'done'])->setStatusCode(200);
-        }
-        else
-            return response()->json(['message' => 'game not found'])->setStatusCode(400);
+        $game->logs()->create([
+            'nickname' => $request->nickname,
+            'score' => $request->score,
+            'duration' => 100,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+        return response()->json(['message' => 'done'])->setStatusCode(200);
     }
 
     /**
