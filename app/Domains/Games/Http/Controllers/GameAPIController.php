@@ -102,4 +102,9 @@ class GameAPIController extends Controller
     {
         //
     }
+
+    public function leaderboard(Game $game)
+    {
+        return $game->logs()->orderBy('score', 'desc')->limit(10)->get();
+    }
 }

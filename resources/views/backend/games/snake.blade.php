@@ -19,17 +19,43 @@
         canvas {
             border: 1px solid white;
         }
+
+        table, th, td {
+            border: 1px solid white;
+            color: white;
+        }
+
+        span {
+            color: white;
+        }
     </style>
 </head>
 <body>
 <div id="div">
-    <span style="color: white">Enter Your Nickname:</span>
+    <span>Enter Your Nickname:</span>
     <input type="text" id="name" autofocus>
     <button type="button" id="button">start</button>
 </div>
-<canvas width="400" height="400" id="game" style="display: none;"></canvas>
+<div id="game" style="display: none; margin-left: 100px;">
+    <canvas width="400" height="400" id="canvas" style="display: inline-block;"></canvas>
+    <div style="width: 400px; height: 400px; display: inline-block; margin-left: 100px;">
+        <table width="100%">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>nickname</th>
+                <th>score</th>
+                <th>duration</th>
+                <th>date</th>
+            </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+
+        </table>
+    </div>
+</div>
 <script>
-    var canvas = document.getElementById('game');
+    var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
     var grid = 16;
@@ -191,6 +217,7 @@
             document.getElementById("div").style.display = 'none';
             document.getElementById("game").style.display = 'block';
             createGame();
+            setInterval(getTableData, 2000);
             requestAnimationFrame(loop);
         } else {
             alert('Enter Your Correct Nickname!Please!');
@@ -199,7 +226,7 @@
 
     function sendData(snake_eaten_number) {
         end = new Date().getTime();
-        duration = (end - start)/1000;
+        duration = (end - start) / 1000;
         console.log(duration);
         fetch('/api/gameLogs/' + gameID, {
             method: 'post',
@@ -233,6 +260,46 @@
             })
             .catch(function (exception) {
                 console.log('err')
+                console.log(exception);
+            });
+    }
+
+    function getTableData() {
+        fetch('/api/games/1/leaderboard', {
+            method: 'GET',
+        }).then(response => response.json())
+            .then(function (data) {
+                var table = document.getElementById("tbody");
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.firstChild);
+                }
+                data.forEach(function (row){
+                    var tr = document.createElement('tr');
+                    if(row.id == gameID){
+                        tr.style.backgroundColor = '#ffc107';
+                        tr.style.color = 'black';
+                    }
+                    var id = document.createElement('td');
+                    id.innerHTML = row.id;
+                    var nickname = document.createElement('td');
+                    nickname.innerHTML = row.nickname;
+                    var score = document.createElement('td');
+                    score.innerHTML = row.score;
+                    var duration = document.createElement('td');
+                    duration.innerHTML = row.duration;
+                    var created_at = document.createElement('td');
+                    created_at.innerHTML = row.created_at;
+                    tr.appendChild(id);
+                    tr.appendChild(nickname);
+                    tr.appendChild(score);
+                    tr.appendChild(duration);
+                    tr.appendChild(created_at);
+                    table.appendChild(tr);
+                })
+                console.log(data);
+            })
+            .catch(function (exception) {
+                console.log('err in leaderboard')
                 console.log(exception);
             });
     }
