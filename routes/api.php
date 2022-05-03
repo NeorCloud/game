@@ -19,3 +19,4 @@ use Illuminate\Http\Request;
 //});
 
 Route::post('/games/{game}', [GameAPIController::class, 'store']);
+Route::post('/gameLogs/{log}', [GameAPIController::class, 'update']);

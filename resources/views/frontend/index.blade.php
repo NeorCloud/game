@@ -96,8 +96,8 @@
                 </div><!--title-->
 
                 <div class="links">
-                    <a href="http://laravel-boilerplate.com" target="_blank"><i class="fa fa-book"></i> @lang('Docs')</a>
-                    <a href="https://github.com/rappasoft/laravel-boilerplate" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="{{route('frontend.games.run', 1)}}">@lang('Snake')</a>
+                    <a href="https://github.com/NeorCloud/game" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                 </div><!--links-->
             </div><!--content-->
         </div><!--app-->

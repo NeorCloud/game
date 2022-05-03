@@ -3,15 +3,25 @@
 namespace App\Domains\Games\Http\Controllers;
 
 use App\Domains\Games\Models\Game;
+use App\Domains\Games\Models\GameLog;
+use App\Domains\Games\Services\GameLogService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GameAPIController extends Controller
 {
+    protected $gameLogService;
+
+    public function __construct(GameLogService $gameLogService)
+    {
+        $this->gameLogService = $gameLogService;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -21,7 +31,7 @@ class GameAPIController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -31,31 +41,30 @@ class GameAPIController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param Game $game
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
      */
     public function store(Request $request, Game $game)
     {
         $request->validate([
             'nickname' => 'required|string|max:255',
-            'score' => 'required|integer',
         ]);
-        $game->logs()->create([
+        $log = $this->gameLogService->store($game, [
             'nickname' => $request->nickname,
-            'score' => $request->score,
-            'duration' => 100,
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
-        return response()->json(['message' => 'done'])->setStatusCode(200);
+//        return Response::json([
+//            'log' => $log,
+//        ], 201);
+        return response($log)->setStatusCode(201);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($game)
     {
@@ -66,7 +75,7 @@ class GameAPIController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -76,20 +85,28 @@ class GameAPIController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param GameLog $log
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, GameLog $log)
     {
-        //
+        $request->validate([
+            'score' => 'required|integer',
+            'duration' => 'required|numeric',
+        ]);
+//        todo check user agent and ip with request and log to verify that it is the same user
+        $this->gameLogService->update($log, [
+            'score' => $request->score,
+            'duration' => $request->duration,
+        ]);
+        return response('log updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

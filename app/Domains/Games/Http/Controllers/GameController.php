@@ -4,10 +4,18 @@ namespace App\Domains\Games\Http\Controllers;
 
 use App\Domains\Games\Models\Game;
 use App\Domains\Games\Models\GameLog;
+use App\Domains\Games\Services\GameService;
 use App\Http\Controllers\Controller;
 
 class GameController extends Controller
 {
+    protected $gameService;
+
+    public function __construct(GameService $gameService)
+    {
+        $this->gameService = $gameService;
+    }
+
     public function index()
     {
         return view('backend.games.index');
@@ -15,7 +23,7 @@ class GameController extends Controller
 
     public function index2list()
     {
-        $games = Game::query();
+        $games = $this->gameService->query();
         return datatables()->of($games)
             ->editColumn('title', function ($game) {
                 return $game->link;
@@ -32,7 +40,7 @@ class GameController extends Controller
 
     public function run(Game $game)
     {
-        if ($game->title == 'snake')
+        if ($game->id == 1)
             return view('backend.games.snake');
     }
 
@@ -43,7 +51,7 @@ class GameController extends Controller
 
     public function leaderboard(Game $game)
     {
-        $logs = $game->logs()->orderBy('score', 'desc');
+        $logs = $game->logs();
         return datatables()->of($logs)
             ->editColumn('created_at', function ($game) {
                 return verta($game->created_at)->timezone(config('app.timezone'))->format('H:i y/m/d');

@@ -76,6 +76,7 @@
         $(function () {
             $('#table').DataTable({
                 processing: true,
+                serverSide: true,
                 responsive: {
                     details: {
                         type: 'column',

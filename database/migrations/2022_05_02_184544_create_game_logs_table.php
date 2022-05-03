@@ -18,7 +18,7 @@ class CreateGameLogsTable extends Migration
             $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('score')->default(0);
             $table->longText('nickname');
-            $table->unsignedBigInteger('duration')->default(0);
+            $table->unsignedFloat('duration')->default(0);
             $table->longText('ip');
             $table->longText('user_agent');
             $table->timestamps();

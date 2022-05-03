@@ -38,6 +38,12 @@
     // statistic variables
     var eaten = 0;
     var nickname = '';
+    var duration = 0;
+    var start = 0;
+    var end = 0;
+
+    // api variables
+    var gameID = '';
 
     var snake = {
         x: 160,
@@ -121,6 +127,7 @@
                 apple.x = getRandomInt(0, 25) * grid;
                 apple.y = getRandomInt(0, 25) * grid;
                 eaten++;
+                sendData(eaten);
             }
 
             // check collision with all cells after this one (modified bubble sort)
@@ -137,6 +144,9 @@
                     snake.dx = grid;
                     snake.dy = 0;
                     eaten = 0;
+                    duration = 0;
+                    gameID = '';
+                    createGame();
 
                     apple.x = getRandomInt(0, 25) * grid;
                     apple.y = getRandomInt(0, 25) * grid;
@@ -180,23 +190,51 @@
             nickname = document.getElementById("name").value;
             document.getElementById("div").style.display = 'none';
             document.getElementById("game").style.display = 'block';
+            createGame();
             requestAnimationFrame(loop);
         } else {
             alert('Enter Your Correct Nickname!Please!');
         }
     });
 
-    async function sendData(snake_eaten_number) {
-        await fetch('/api/games/1', {
-            method: 'POST',
+    function sendData(snake_eaten_number) {
+        end = new Date().getTime();
+        duration = (end - start)/1000;
+        console.log(duration);
+        fetch('/api/gameLogs/' + gameID, {
+            method: 'post',
             body: JSON.stringify({
-                'nickname': nickname,
                 'score': snake_eaten_number,
+                'duration': duration,
             }),
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(function (response) {
+
+        }).catch(function (exception) {
+            console.log(exception);
         });
+    }
+
+    function createGame() {
+        fetch('/api/games/1', {
+            method: 'POST',
+            body: JSON.stringify({
+                'nickname': nickname,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(function (data) {
+                gameID = data.id;
+                start = new Date().getTime();
+            })
+            .catch(function (exception) {
+                console.log('err')
+                console.log(exception);
+            });
     }
 </script>
 </body>
