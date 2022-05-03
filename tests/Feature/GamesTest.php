@@ -14,8 +14,10 @@ class GamesTest extends TestCase
     /** @test */
     public function snake_game_exists()
     {
-        $game = Game::find(1);
-        $this->assertNotNull($game);
+        $this->assertDatabaseHas('games', [
+            'id' => 1,
+            'title' => 'snake',
+        ]);
         $response = $this->get('/games/1');
 
         $response->assertStatus(200);
