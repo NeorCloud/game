@@ -50,7 +50,6 @@ class GameLogService extends BaseService
 
     public function update(GameLog $log, array $data = []): GameLog
     {
-        \Log::info(gettype($data['duration']));
         if ($data['score'] == null || $data['duration'] == null)
             throw new GeneralException(__('score or duration cant be null for updating game log'));
         DB::beginTransaction();

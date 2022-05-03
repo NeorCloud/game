@@ -2,6 +2,7 @@
 
 namespace App\Domains\Games\Http\Controllers;
 
+use App\Domains\Games\Http\Requests\StoreGameLogRequest;
 use App\Domains\Games\Models\Game;
 use App\Domains\Games\Models\GameLog;
 use App\Domains\Games\Services\GameLogService;
@@ -44,19 +45,13 @@ class GameAPIController extends Controller
      * @param Request $request
      * @param Game $game
      */
-    public function store(Request $request, Game $game)
+    public function store(StoreGameLogRequest $request, Game $game)
     {
-        $request->validate([
-            'nickname' => 'required|string|max:255',
-        ]);
         $log = $this->gameLogService->store($game, [
             'nickname' => $request->nickname,
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
-//        return Response::json([
-//            'log' => $log,
-//        ], 201);
         return response($log)->setStatusCode(201);
     }
 
@@ -90,11 +85,6 @@ class GameAPIController extends Controller
      */
     public function update(Request $request, GameLog $log)
     {
-        $request->validate([
-            'score' => 'required|integer',
-            'duration' => 'required|numeric',
-        ]);
-//        todo check user agent and ip with request and log to verify that it is the same user
         $this->gameLogService->update($log, [
             'score' => $request->score,
             'duration' => $request->duration,
