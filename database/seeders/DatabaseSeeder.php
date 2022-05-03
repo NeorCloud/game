@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         if (Setting::count() == 0) {
             $this->call(SettingsTableSeeder::class);
         }
+        $this->call(GamesTableSeeder::class);
     }
 }
