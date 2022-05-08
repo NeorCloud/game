@@ -63,6 +63,7 @@
                         <th>@lang('Score')</th>
                         <th>@lang('Duration')</th>
                         <th>@lang('Created At')</th>
+                        <th>@lang('Details')</th>
                     </tr>
                     </thead>
                 </table>
@@ -99,6 +100,7 @@
                     {data: 'score', name: 'score'},
                     {data: 'duration', name: 'duration'},
                     {data: 'created_at', name: 'created_at', searchable: false},
+                    {data: 'details', name: 'details', searchable: false, orderable: false},
                 ],
                 @include('backend.includes.dtTranslate')
             });
