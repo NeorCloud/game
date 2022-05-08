@@ -3,6 +3,7 @@
 namespace App\Domains\Games\Http\Controllers;
 
 use App\Domains\Games\Http\Requests\StoreGameLogRequest;
+use App\Domains\Games\Http\Requests\UpdateGameLogRequest;
 use App\Domains\Games\Models\Game;
 use App\Domains\Games\Models\GameLog;
 use App\Domains\Games\Services\GameLogService;
@@ -83,7 +84,7 @@ class GameAPIController extends Controller
      * @param Request $request
      * @param GameLog $log
      */
-    public function update(Request $request, GameLog $log)
+    public function update(UpdateGameLogRequest $request, GameLog $log)
     {
         $this->gameLogService->update($log, [
             'score' => $request->score,
