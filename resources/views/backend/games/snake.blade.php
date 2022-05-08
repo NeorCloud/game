@@ -42,7 +42,8 @@
         <table width="100%">
             <thead>
             <tr>
-                <th>id</th>
+                <th>#</th>
+                <th>game_id</th>
                 <th>nickname</th>
                 <th>score</th>
                 <th>duration</th>
@@ -227,7 +228,6 @@
     function sendData(snake_eaten_number) {
         end = new Date().getTime();
         duration = (end - start) / 1000;
-        console.log(duration);
         fetch('/api/gameLogs/' + gameID, {
             method: 'post',
             body: JSON.stringify({
@@ -280,14 +280,16 @@
                     }
                 });
                 if(flag) {
+                    var i = 1;
                     data.forEach(function (row) {
-                        createRow(table, row, gameID);
+                        createRow(table, row, i, gameID);
+                        i++;
                     });
                 } else {
                     var i = 1;
                     data.forEach(function (row) {
                         if(i < 6){
-                            createRow(table, row, gameID);
+                            createRow(table, row, i, gameID);
                             i++;
                         }
                     });
@@ -304,9 +306,8 @@
                         'score': eaten,
                         'duration': duration,
                     }
-                    createRow(table, row, gameID);
+                    createRow(table, row, '#', gameID);
                 }
-                console.log(data);
             })
             .catch(function (exception) {
                 console.log('err in leaderboard')
@@ -315,8 +316,10 @@
 
     }
 
-    function createRow(table, row, game_id = null) {
+    function createRow(table, row, ranking, game_id = null) {
         var tr = document.createElement('tr');
+        var rank = document.createElement('td');
+        rank.innerHTML = ranking;
         if (row.id == game_id) {
             tr.style.backgroundColor = '#ffc107';
             tr.style.color = 'black';
@@ -331,6 +334,7 @@
         duration.innerHTML = row.duration;
         var created_at = document.createElement('td');
         created_at.innerHTML = row.created_at;
+        tr.appendChild(rank);
         tr.appendChild(id);
         tr.appendChild(nickname);
         tr.appendChild(score);
