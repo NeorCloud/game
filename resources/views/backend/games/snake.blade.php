@@ -273,35 +273,70 @@
                 while (table.hasChildNodes()) {
                     table.removeChild(table.firstChild);
                 }
-                data.forEach(function (row){
-                    var tr = document.createElement('tr');
+                var flag = false;
+                data.forEach(function (row) {
                     if(row.id == gameID){
-                        tr.style.backgroundColor = '#ffc107';
-                        tr.style.color = 'black';
+                        flag = true;
                     }
-                    var id = document.createElement('td');
-                    id.innerHTML = row.id;
-                    var nickname = document.createElement('td');
-                    nickname.innerHTML = row.nickname;
-                    var score = document.createElement('td');
-                    score.innerHTML = row.score;
-                    var duration = document.createElement('td');
-                    duration.innerHTML = row.duration;
-                    var created_at = document.createElement('td');
-                    created_at.innerHTML = row.created_at;
-                    tr.appendChild(id);
-                    tr.appendChild(nickname);
-                    tr.appendChild(score);
-                    tr.appendChild(duration);
-                    tr.appendChild(created_at);
-                    table.appendChild(tr);
-                })
+                });
+                if(flag) {
+                    data.forEach(function (row) {
+                        createRow(table, row, gameID);
+                    });
+                } else {
+                    var i = 1;
+                    data.forEach(function (row) {
+                        if(i < 6){
+                            createRow(table, row, gameID);
+                            i++;
+                        }
+                    });
+                    for (var i = 0; i < 3; i++) {
+                        var tr1 = document.createElement('tr');
+                        var dot = document.createElement('span');
+                        dot.innerHTML = '.';
+                        tr1.appendChild(dot);
+                        table.appendChild(tr1);
+                    }
+                    var row = {
+                        'id': gameID,
+                        'nickname': nickname,
+                        'score': eaten,
+                        'duration': duration,
+                    }
+                    createRow(table, row, gameID);
+                }
                 console.log(data);
             })
             .catch(function (exception) {
                 console.log('err in leaderboard')
                 console.log(exception);
             });
+
+    }
+
+    function createRow(table, row, game_id = null) {
+        var tr = document.createElement('tr');
+        if (row.id == game_id) {
+            tr.style.backgroundColor = '#ffc107';
+            tr.style.color = 'black';
+        }
+        var id = document.createElement('td');
+        id.innerHTML = row.id;
+        var nickname = document.createElement('td');
+        nickname.innerHTML = row.nickname;
+        var score = document.createElement('td');
+        score.innerHTML = row.score;
+        var duration = document.createElement('td');
+        duration.innerHTML = row.duration;
+        var created_at = document.createElement('td');
+        created_at.innerHTML = row.created_at;
+        tr.appendChild(id);
+        tr.appendChild(nickname);
+        tr.appendChild(score);
+        tr.appendChild(duration);
+        tr.appendChild(created_at);
+        table.appendChild(tr);
     }
 </script>
 </body>
