@@ -91,6 +91,7 @@ class Kernel extends HttpKernel
         'check_setting_permission' => \App\Domains\Settings\Http\Middleware\CheckSettingsPermission::class,
         'check_file_permission' => \App\Domains\Files\Http\Middleware\CheckFilesPermission::class,
         'check_backup_permission' => \App\Domains\Backups\Http\Middleware\CheckBackupPermission::class,
+        'check_game_permission' => \App\Domains\Games\Http\Middleware\CheckGamesPermission::class,
     ];
 
     /**

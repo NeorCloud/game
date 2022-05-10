@@ -119,22 +119,24 @@
             </li>
         @endif
 
-        <li class="c-sidebar-nav-dropdown">
-            <x-utils.link
-                href="#"
-                icon="c-sidebar-nav-icon fas fa-gamepad"
-                class="c-sidebar-nav-dropdown-toggle"
-                :text="__('Games')" />
+        @if ($logged_in_user->can('admin.access.games'))
+            <li class="c-sidebar-nav-dropdown">
+                <x-utils.link
+                    href="#"
+                    icon="c-sidebar-nav-icon fas fa-gamepad"
+                    class="c-sidebar-nav-dropdown-toggle"
+                    :text="__('Games')" />
 
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item">
-                    <x-utils.link
-                        :href="route('admin.games.index')"
-                        class="c-sidebar-nav-link"
-                        :text="__('List')" />
-                </li>
-            </ul>
-        </li>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    <li class="c-sidebar-nav-item">
+                        <x-utils.link
+                            :href="route('admin.games.index')"
+                            class="c-sidebar-nav-link"
+                            :text="__('List')" />
+                    </li>
+                </ul>
+            </li>
+        @endif
     </ul>
 
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>

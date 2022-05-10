@@ -110,6 +110,12 @@ class PermissionRoleSeeder extends Seeder
             'description' => 'Backups Permission',
         ]);
 
+        Permission::create([
+            'type' => User::TYPE_ADMIN,
+            'name' => 'admin.access.games',
+            'description' => 'Games Permission',
+        ]);
+
         $this->enableForeignKeys();
     }
 }

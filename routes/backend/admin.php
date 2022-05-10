@@ -38,7 +38,7 @@ Route::group(['middleware' => 'check_backup_permission', 'prefix' => 'backups', 
 });
 
 //todo add permissions
-Route::group(['prefix' => 'games', 'as' => 'games.'], function () {
+Route::group(['middleware' => 'check_game_permission', 'prefix' => 'games', 'as' => 'games.'], function () {
     Route::get('index2list', [GameController::class, 'index2list']);
     Route::get('', [GameController::class, 'index'])->name('index');
     Route::get('/index2list', [GameController::class, 'index2list'])->name('list');

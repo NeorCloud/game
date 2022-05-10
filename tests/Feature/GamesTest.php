@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Domains\Auth\Models\User;
 use App\Domains\Games\Models\Game;
 use App\Domains\Games\Services\GameLogService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class GamesTest extends TestCase
@@ -67,5 +67,18 @@ class GamesTest extends TestCase
         $response->assertJson([
             $log->toArray(),
         ]);
+    }
+
+    /** @test */
+    public function user_with_right_permission_can_work_with_game_in_backend()
+    {
+        $user = User::factory()->admin()->create();
+        $this->actingAs($user);
+        $response = $this->get('admin/games');
+        $response->assertSessionHas('flash_danger', __('You do not have access to do that.'));
+
+        $user->givePermissionTo('admin.access.games');
+        $response = $this->get('admin/games');
+        $response->assertStatus(200);
     }
 }
