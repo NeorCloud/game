@@ -29,3 +29,10 @@ Route::get('games/{game}', [GameController::class, 'run'])
         $trail->parent('frontend.index')
             ->push($game->name, route('frontend.games.show', $game));
     });
+
+Route::get('games',[GameController::class, 'frontendIndex'])
+    ->name('games.index')
+    ->breadcrumbs(function (Trail $trail) {
+        $trail->parent('frontend.index')
+            ->push(__('Games'), route('frontend.games.index'));
+    });

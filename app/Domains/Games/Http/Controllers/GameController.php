@@ -40,8 +40,7 @@ class GameController extends Controller
 
     public function run(Game $game)
     {
-        if ($game->id == 1)
-            return view('backend.games.snake');
+        return view('backend.games.run.'.$game->title);
     }
 
     public function show(Game $game)
@@ -78,5 +77,11 @@ class GameController extends Controller
             })
             ->rawColumns(['details'])
             ->make(true);
+    }
+
+    public function frontendIndex()
+    {
+        $games = $this->gameService->all();
+        return view('frontend.games', compact('games'));
     }
 }

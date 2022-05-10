@@ -96,7 +96,7 @@
                 </div><!--title-->
 
                 <div class="links">
-                    <a href="{{route('frontend.games.run', 1)}}">@lang('Snake')</a>
+                    <a href="{{route('frontend.games.index')}}">Games</a>
                     <a href="https://github.com/NeorCloud/game" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                 </div><!--links-->
             </div><!--content-->
