@@ -40,7 +40,9 @@ class GameController extends Controller
 
     public function run(Game $game)
     {
-        return view('backend.games.run.'.$game->title);
+        $name = strtolower($game->title);
+        $name = str_replace(' ', '-', $name);
+        return view('backend.games.run.'.$name);
     }
 
     public function show(Game $game)
