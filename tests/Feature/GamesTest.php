@@ -13,15 +13,14 @@ class GamesTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function snake_game_exists()
+    public function games_exists_and_runnable()
     {
-        $this->assertDatabaseHas('games', [
-            'id' => 1,
-            'title' => 'snake',
-        ]);
-        $response = $this->get('/games/1');
+        $games = Game::all();
+        foreach ($games as $game) {
+            $response = $this->get('/games/'.$game->id);
 
-        $response->assertStatus(200);
+            $response->assertStatus(200);
+        }
     }
 
     /** @test */
