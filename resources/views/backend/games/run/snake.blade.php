@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Snake HTML Game</title>
+    <title>{{ appName() }} | Snake</title>
     <meta charset="UTF-8">
     <style>
         html, body {
@@ -62,14 +62,14 @@
     var grid = 16;
     var count = 0;
 
-    // statistic variables
+    // statistic variables:
     var eaten = 0;
     var nickname = '';
     var duration = 0;
     var start = 0;
     var end = 0;
 
-    // api variables
+    // api variables:
     var gameID = '';
 
     var snake = {

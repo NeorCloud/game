@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Tetris HTML Game</title>
+    <title>{{appName()}} | Tetris</title>
     <meta charset="UTF-8">
     <style>
         html, body {
@@ -19,19 +19,70 @@
         canvas {
             border: 1px solid white;
         }
+
+        span {
+            color: white;
+        }
+
+        table, th, td {
+            border: 1px solid white;
+            color: white;
+        }
     </style>
 </head>
 <body>
-<canvas width="320" height="640" id="game"></canvas>
+<div id="div">
+    <span>Enter Your Nickname:</span>
+    <input type="text" id="name" autofocus>
+    <button type="button" id="button">start</button>
+</div>
+
+<div id="game" style="display: none; margin-left: 100px;">
+    <canvas width="320" height="640" id="canvas" style="display: inline-block;"></canvas>
+    <div style="width: 400px; height: 400px; display: inline-block; margin-left: 100px;">
+        <table width="100%">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>game_id</th>
+                <th>nickname</th>
+                <th>score</th>
+                <th>duration</th>
+                <th>date</th>
+            </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+</div>
 <script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    const grid = 32;
+    const tetrominoSequence = [];
+
+    // keep track of what is in every cell of the game using a 2d array
+    // tetris playfield is 10x20, with a few rows offscreen
+    const playfield = [];
+
+    // statistic variables:
+    var nickname = '';
+    var duration = 0;
+    var start = 0;
+    var end = 0;
+    // score will be count from removed lines
+    var score = 0;
+
+    // api variables:
+    var gameID = '';
+
     // https://tetris.fandom.com/wiki/Tetris_Guideline
 
     // get a random integer between the range of [min,max]
-    // @see https://stackoverflow.com/a/1527820/2124254
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
-
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
@@ -109,6 +160,7 @@
 
                     // game over if piece has any part offscreen
                     if (tetromino.row + row < 0) {
+                        sendData(score);
                         return showGameOver();
                     }
 
@@ -127,11 +179,13 @@
                         playfield[r][c] = playfield[r-1][c];
                     }
                 }
+                score++;
             }
             else {
                 row--;
             }
         }
+        sendData(score);
 
         tetromino = getNextTetromino();
     }
@@ -151,16 +205,12 @@
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2);
+
+        alert('Tnx for playing... Your score was:' + score);
+        var url = window.location.href.split('?')[0];
+        window.location = url + "?nickname=" + nickname;
+
     }
-
-    const canvas = document.getElementById('game');
-    const context = canvas.getContext('2d');
-    const grid = 32;
-    const tetrominoSequence = [];
-
-    // keep track of what is in every cell of the game using a 2d array
-    // tetris playfield is 10x20, with a few rows offscreen
-    const playfield = [];
 
     // populate the empty state
     for (let row = -2; row < 20; row++) {
@@ -313,7 +363,142 @@
     });
 
     // start the game
-    rAF = requestAnimationFrame(loop);
+    document.getElementById("button").addEventListener("click", function () {
+        if (document.getElementById("name").value != '') {
+            nickname = document.getElementById("name").value;
+            document.getElementById("div").style.display = 'none';
+            document.getElementById("game").style.display = 'block';
+            createGame();
+            setInterval(getTableData, 2000);
+            rAF = requestAnimationFrame(loop);
+        } else {
+            alert('Enter Your Correct Nickname!Please!');
+        }
+    });
+
+    function createGame() {
+        fetch('/api/games/3', {
+            method: 'POST',
+            body: JSON.stringify({
+                'nickname': nickname,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(function (data) {
+                gameID = data.id;
+                start = new Date().getTime();
+            })
+            .catch(function (exception) {
+                console.log('err')
+                console.log(exception);
+            });
+    }
+
+    function getTableData() {
+        fetch('/api/games/3/leaderboard', {
+            method: 'GET',
+        }).then(response => response.json())
+            .then(function (data) {
+                var table = document.getElementById("tbody");
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.firstChild);
+                }
+                var flag = false;
+                data.forEach(function (row) {
+                    if(row.id == gameID){
+                        flag = true;
+                    }
+                });
+                if(flag) {
+                    var i = 1;
+                    data.forEach(function (row) {
+                        createRow(table, row, i, gameID);
+                        i++;
+                    });
+                } else {
+                    var i = 1;
+                    data.forEach(function (row) {
+                        if(i < 6){
+                            createRow(table, row, i, gameID);
+                            i++;
+                        }
+                    });
+                    for (var i = 0; i < 3; i++) {
+                        var tr1 = document.createElement('tr');
+                        var dot = document.createElement('span');
+                        dot.innerHTML = '.';
+                        tr1.appendChild(dot);
+                        table.appendChild(tr1);
+                    }
+                    var row = {
+                        'id': gameID,
+                        'nickname': nickname,
+                        'score': score,
+                        'duration': duration,
+                    }
+                    createRow(table, row, '#', gameID);
+                }
+            })
+            .catch(function (exception) {
+                console.log('err in leaderboard')
+                console.log(exception);
+            });
+
+    }
+
+    function createRow(table, row, ranking, game_id = null) {
+        var tr = document.createElement('tr');
+        var rank = document.createElement('td');
+        rank.innerHTML = ranking;
+        if (row.id == game_id) {
+            tr.style.backgroundColor = '#ffc107';
+            tr.style.color = 'black';
+        }
+        var id = document.createElement('td');
+        id.innerHTML = row.id;
+        var nickname = document.createElement('td');
+        nickname.innerHTML = row.nickname;
+        var score = document.createElement('td');
+        score.innerHTML = row.score;
+        var duration = document.createElement('td');
+        duration.innerHTML = row.duration;
+        var created_at = document.createElement('td');
+        created_at.innerHTML = row.created_at;
+        tr.appendChild(rank);
+        tr.appendChild(id);
+        tr.appendChild(nickname);
+        tr.appendChild(score);
+        tr.appendChild(duration);
+        tr.appendChild(created_at);
+        table.appendChild(tr);
+    }
+
+    function sendData(score) {
+        end = new Date().getTime();
+        duration = (end - start) / 1000;
+        fetch('/api/gameLogs/' + gameID, {
+            method: 'post',
+            body: JSON.stringify({
+                'score': score,
+                'duration': duration,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+
+        }).catch(function (exception) {
+            console.log(exception);
+        });
+    }
+
+    window.addEventListener('load', (event) => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        document.getElementById("name").value = urlParams.get('nickname');
+    });
 </script>
 </body>
 </html>
