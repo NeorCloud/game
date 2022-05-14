@@ -6,6 +6,7 @@ use App\Domains\Games\Models\Game;
 use App\Domains\Games\Models\GameLog;
 use App\Domains\Games\Services\GameService;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class GameController extends Controller
 {
@@ -47,7 +48,48 @@ class GameController extends Controller
 
     public function show(Game $game)
     {
-        return view('backend.games.show', compact('game'));
+        $days = 10;
+        $playedTimeByDaySum = []; // 1
+        $playedDurationByDaySum = []; // 3
+
+        $playedTimeByDayCount = []; // 2
+        $playedDurationByDay = []; // 4
+
+        $playedTimeByDaySum[] = [
+            '' => $game->logs()->whereDate('updated_at', '<=', Carbon::parse(now())->subDays($days + 1)->endOfDay())->count()
+        ];
+        for ($i = $days; $i >= 0; $i--) {
+            $playedTimeByDaySum[] = [
+                verta(now())->timezone(config('app.timezone'))->subDay($i)->format('y/m/d') =>
+                    $game->logs()->whereDate('updated_at', '<=', Carbon::parse(now())->subDays($i))->count()
+            ];
+        }
+
+        $playedDurationByDaySum[] = [
+            '' => $game->logs()->whereDate('updated_at', '<=', Carbon::parse(now())->subDays($days + 1)->endOfDay())->sum('duration')
+        ];
+        for ($i = $days; $i >= 0; $i--) {
+            $playedDurationByDaySum[] = [
+                verta(now())->timezone(config('app.timezone'))->subDay($i)->format('y/m/d') =>
+                    $game->logs()->whereDate('updated_at', '<=', Carbon::parse(now())->subDays($i))->sum('duration')
+            ];
+        }
+
+        for ($i = $days; $i >= 0; $i--) {
+            $playedTimeByDayCount[] = [
+                verta(now())->timezone(config('app.timezone'))->subDay($i)->format('y/m/d') =>
+                    $game->logs()->whereDate('updated_at', '=', Carbon::parse(now())->subDays($i))->count()
+            ];
+        }
+
+        for ($i = $days; $i >= 0; $i--) {
+            $playedDurationByDay[] = [
+                verta(now())->timezone(config('app.timezone'))->subDay($i)->format('y/m/d') =>
+                    $game->logs()->whereDate('updated_at', '=', Carbon::parse(now())->subDays($i))->sum('duration')
+            ];
+        }
+
+        return view('backend.games.show', compact('game', 'playedTimeByDayCount', 'playedDurationByDay', 'playedDurationByDaySum', 'playedTimeByDaySum'));
     }
 
     public function leaderboard(Game $game)

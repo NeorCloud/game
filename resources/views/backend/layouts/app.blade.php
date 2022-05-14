@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ appName() }} | @yield('title')</title>
     <meta name="description" content="@yield('meta_description', appName())">
-    <meta name="author" content="@yield('meta_author', 'Anthony Rappa')">
+    <meta name="author" content="@yield('meta_author', 'Mohammad Salmani')">
     @yield('meta')
 
     @stack('before-styles')
@@ -54,7 +54,7 @@
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/backend.js') }}"></script>
-    <script src="{{url('/js/jquery.form.js')}}" type="text/javascript"></script>
+{{--    <script src="{{url('/js/jquery.form.js')}}" type="text/javascript"></script>--}}
     <script src="{{url('/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>
     <script src="{{url('/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
     <script src="{{url('/js/persianDatepicker.min.js')}}" type="text/javascript"></script>

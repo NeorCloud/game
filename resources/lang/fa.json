@@ -255,5 +255,14 @@
     "Nickname": "اسم مستعار",
     "Score": "امتیاز",
     "Duration":  "مدت",
-    "Details": "جزئیات"
+    "Details": "جزئیات",
+    "Played Time By Day Sum": "مجموع تعداد بار بازی شده تا روز",
+    "Count": "تعداد",
+    "Day": "روز",
+    "Played Time By Day Count": "تعداد بار بازی شده در روز",
+    "Played Duration By Day Sum": "مجموع مدت بازی شده تا روز",
+    "Second": "ثانیه",
+    "Played Duration By Day": "مدت بازی شده در روز",
+    "All Scores": "تمام امتیازات",
+    "All Duration Played": "کل مدت بازی شده"
 }

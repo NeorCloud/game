@@ -8,11 +8,9 @@
     <meta name="keyword" content="Panel">
     <title>{{config('app.name') . ' | ' . __('Login')}}</title>
     <meta name="theme-color" content="#ffffff">
-    <link href="{{ url('/css/login/free.min.css') }}" rel="stylesheet">
-    <link href="{{ url('/css/login/flag.min.css') }}" rel="stylesheet">
     <link href="{{ url('/css/login/style.css') }}" rel="stylesheet">
     <link href="{{ url('/css/login/pace.min.css') }}" rel="stylesheet">
-    <link href="{{ url('/fontawesome/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url('/css/icons.css') }}" rel="stylesheet">
     <script>
         window.dataLayer = window.dataLayer || [];
 
