@@ -23,4 +23,9 @@ class GameLog extends Model
     {
         return $this->belongsTo(Game::class);
     }
+
+    public function getRankingAttribute()
+    {
+        return $this->game->logs()->where('score','>',$this->score)->count() +1;
+    }
 }

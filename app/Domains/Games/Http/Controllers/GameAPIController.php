@@ -59,12 +59,12 @@ class GameAPIController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param GameLog $log
+     * @return GameLog
      */
-    public function show($game)
+    public function ranking(GameLog $log)
     {
-
+        return $log->ranking;
     }
 
     /**

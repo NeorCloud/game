@@ -76,6 +76,7 @@
 
     // api variables:
     var gameID = '';
+    var gameRank = '';
 
     // https://tetris.fandom.com/wiki/Tetris_Guideline
 
@@ -389,6 +390,8 @@
             .then(function (data) {
                 gameID = data.id;
                 start = new Date().getTime();
+                getGameIDRanking(gameID);
+
             })
             .catch(function (exception) {
                 console.log('err')
@@ -397,6 +400,8 @@
     }
 
     function getTableData() {
+        getGameIDRanking(gameID);
+
         fetch('/api/games/3/leaderboard', {
             method: 'GET',
         }).then(response => response.json())
@@ -438,7 +443,7 @@
                         'score': score,
                         'duration': duration,
                     }
-                    createRow(table, row, '#', gameID);
+                    createRow(table, row, gameRank, gameID);
                 }
             })
             .catch(function (exception) {
@@ -499,6 +504,19 @@
         const urlParams = new URLSearchParams(queryString);
         document.getElementById("name").value = urlParams.get('nickname');
     });
+
+    function getGameIDRanking(gameLogId) {
+        fetch('/api/gameLogs/'+gameLogId+'/ranking', {
+            method: 'GET',
+        }).then(response => response.json())
+            .then(function (data) {
+                gameRank = data;
+            })
+            .catch(function (exception) {
+                console.log('err in leaderboard')
+                console.log(exception);
+            });
+    }
 </script>
 </body>
 </html>
