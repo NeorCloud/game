@@ -80,4 +80,18 @@ class GamesTest extends TestCase
         $response = $this->get('admin/games');
         $response->assertStatus(200);
     }
+
+    /** @test */
+    public function game_log_ranking(){
+        $game = Game::find(1);
+
+        $log = resolve(GameLogService::class)->store($game, [
+            'nickname' => 'test',
+            'ip' => '127.0.0.1',
+            'user_agent' => 'test',
+        ]);
+        $response = $this->get('/api/gameLogs/' . $log->id . '/ranking');
+        $response->assertStatus(200);
+        $response->assertSeeText(1);
+    }
 }
