@@ -1,11 +1,11 @@
 <footer class="c-footer">
-    <div>
+    <div id="appVersion">
         <strong>
             @lang('Copyright') &copy; {{ date('Y') }}
-            <x-utils.link href="http://laravel-boilerplate.com" target="_blank" :text="__(appName())" />
+            <x-utils.link href="https://neorcloud.com/" target="_blank" :text="__(appName())" />
         </strong>
 
-        @lang('All Rights Reserved')
+        @lang('All Rights Reserved').
     </div>
 
     <div class="mfs-auto">

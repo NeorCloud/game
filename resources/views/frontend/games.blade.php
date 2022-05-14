@@ -42,6 +42,12 @@
             top: 18px;
         }
 
+        .bottom-right {
+            position: absolute;
+            right: 25px;
+            bottom: 18px;
+        }
+
         .content {
             text-align: center;
         }
@@ -88,16 +94,34 @@
 
         <ul>
             @foreach ($games as $game)
-                <li><a href="{{route('frontend.games.run',$game->id)}}" style="color: #636b6f; text-transform: uppercase">{{$game->title}}</a></li>
+                <li><a href="{{route('frontend.games.run',$game->id)}}"
+                       style="color: #636b6f; text-transform: uppercase">{{$game->title}}</a></li>
             @endforeach
         </ul><!--links-->
     </div><!--content-->
+
+    <div class="bottom-right links">
+        <div id="appVersion"></div>
+    </div>
 </div><!--app-->
 
 @stack('before-scripts')
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/frontend.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: '{{ url('/api/appVersion') }}',
+            success: function (res) {
+                if (res) {
+                    $('#appVersion').append(res);
+                }
+            }
+        });
+    });
+</script>
 @stack('after-scripts')
 </body>
 </html>

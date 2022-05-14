@@ -14,4 +14,9 @@ class HomeController
     {
         return view('frontend.index');
     }
+
+    public function appVersion()
+    {
+        return response(exec('git describe --tags'), 200);
+    }
 }

@@ -48,7 +48,10 @@
 {{--                            <h2>@lang('auth.sign_up')</h2>--}}
 {{--                            <p>@lang('strings.register_string')</p>--}}
                             <div class="row justify-content-center">
-                                <img class="col-md-8" src="{{ optional(\App\Domains\Files\Models\File::find(optional(\App\Domains\Settings\Models\Setting::find(2))->value))->src    }}" alt="Logo">
+                                <div class="col-md-8">
+                                    <img src="{{ optional(\App\Domains\Files\Models\File::find(optional(\App\Domains\Settings\Models\Setting::find(2))->value))->src }}" alt="Logo">
+                                    <div id="appVersion"></div>
+                                </div>
                             </div>
 {{--                            <a href="{{route('frontend.auth.register')}}" class="btn btn-primary active mt-3"--}}
 {{--                               type="button">@lang('navs.frontend.register')</a>--}}
@@ -96,6 +99,8 @@
 </div>
 <script src="{{ url('/js/login/pace.min.js') }}"></script>
 <script src="{{ url('/js/login/coreui.bundle.min.js') }}"></script>
+<script src="{{ url('/js/jquery.js') }}"></script>
+
 <script>
     function eye() {
         var x = document.getElementById("password");
@@ -109,6 +114,17 @@
         }
 
     }
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: '{{ url('/api/appVersion') }}',
+            success: function (res) {
+                if (res) {
+                    $('#appVersion').append(res);
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>

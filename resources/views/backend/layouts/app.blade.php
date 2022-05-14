@@ -55,6 +55,17 @@
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/backend.js') }}"></script>
 {{--    <script src="{{url('/js/jquery.form.js')}}" type="text/javascript"></script>--}}
+    <script type="text/javascript">
+        $.ajax({
+            type: "get",
+            url: '{{ url('/api/appVersion') }}',
+            success: function (res) {
+                if (res) {
+                    $('#appVersion').append(res);
+                }
+            }
+        });
+    </script>
     <script src="{{url('/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>
     <script src="{{url('/js/dataTables.responsive.min.js')}}" type="text/javascript"></script>
     <script src="{{url('/js/persianDatepicker.min.js')}}" type="text/javascript"></script>
