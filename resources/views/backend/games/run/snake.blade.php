@@ -25,6 +25,13 @@
             color: white;
         }
 
+        .bottom-right {
+            position: absolute;
+            right: 25px;
+            bottom: 18px;
+            color: white;
+        }
+
         span {
             color: white;
         }
@@ -51,10 +58,14 @@
             </tr>
             </thead>
             <tbody id="tbody"></tbody>
-
         </table>
     </div>
 </div>
+
+<div class="bottom-right">
+    <div id="appVersion"></div>
+</div>
+
 <script>
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
@@ -359,6 +370,19 @@
                 console.log(exception);
             });
     }
+
+    fetch('/api/appVersion/', {
+        method: 'GET',
+    }).then(response => response.text())
+        .then(function (data) {
+            gameRank = data;
+            document.getElementById('appVersion').innerText = data;
+        })
+        .catch(function (exception) {
+            console.log('err in app version')
+            console.log(exception);
+        });
+
 </script>
 </body>
 </html>

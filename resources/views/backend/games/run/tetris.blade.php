@@ -28,6 +28,13 @@
             border: 1px solid white;
             color: white;
         }
+
+        .bottom-right {
+            position: absolute;
+            right: 25px;
+            bottom: 18px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +61,10 @@
             <tbody id="tbody"></tbody>
         </table>
     </div>
+</div>
+
+<div class="bottom-right">
+    <div id="appVersion"></div>
 </div>
 <script>
     const canvas = document.getElementById('canvas');
@@ -513,10 +524,23 @@
                 gameRank = data;
             })
             .catch(function (exception) {
-                console.log('err in leaderboard')
+                console.log('err in ranking')
                 console.log(exception);
             });
     }
+
+    fetch('/api/appVersion/', {
+        method: 'GET',
+    }).then(response => response.text())
+        .then(function (data) {
+            gameRank = data;
+            document.getElementById('appVersion').innerText = data;
+        })
+        .catch(function (exception) {
+            console.log('err in app version')
+            console.log(exception);
+        });
+
 </script>
 </body>
 </html>
