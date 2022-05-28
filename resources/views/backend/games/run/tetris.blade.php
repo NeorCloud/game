@@ -35,9 +35,22 @@
             bottom: 18px;
             color: white;
         }
+
+        .top-center {
+            position: absolute;
+            top: 50px;
+        }
+
     </style>
+    {!! optional(\App\Domains\Settings\Models\Setting::find(5))->value !!}
 </head>
 <body>
+<div class="top-center">
+    <a href="{{optional(\App\Domains\Settings\Models\Setting::find(4))->value}}" target="_blank">
+        <img src="{{optional(\App\Domains\Settings\Models\Setting::find(3))->value}}" width="500" height="100">
+    </a>
+</div>
+
 <div id="div">
     <span>Enter Your Nickname:</span>
     <input type="text" id="name" autofocus>

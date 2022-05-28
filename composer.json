@@ -1,11 +1,14 @@
 {
-    "name": "rappasoft/laravel-boilerplate",
+    "name": "neorcloud/game",
     "type": "project",
-    "description": "The Laravel Boilerplate Project.",
+    "description": "NeorCloud open source games",
     "keywords": [
         "framework",
         "laravel",
-        "boilerplate"
+        "free games",
+        "snake",
+        "Open source",
+        "tetris"
     ],
     "license": "MIT",
     "require": {

@@ -32,12 +32,23 @@
             color: white;
         }
 
+        .top-center {
+            position: absolute;
+            top: 50px;
+        }
+
         span {
             color: white;
         }
     </style>
+    {!! optional(\App\Domains\Settings\Models\Setting::find(5))->value !!}
 </head>
 <body>
+<div class="top-center">
+    <a href="{{optional(\App\Domains\Settings\Models\Setting::find(4))->value}}" target="_blank">
+        <img src="{{optional(\App\Domains\Settings\Models\Setting::find(3))->value}}" width="500" height="100">
+    </a>
+</div>
 <div id="div">
     <span>Enter Your Nickname:</span>
     <input type="text" id="name" autofocus>
@@ -290,11 +301,11 @@
                 }
                 var flag = false;
                 data.forEach(function (row) {
-                    if(row.id == gameID){
+                    if (row.id == gameID) {
                         flag = true;
                     }
                 });
-                if(flag) {
+                if (flag) {
                     var i = 1;
                     data.forEach(function (row) {
                         createRow(table, row, i, gameID);
@@ -303,7 +314,7 @@
                 } else {
                     var i = 1;
                     data.forEach(function (row) {
-                        if(i < 6){
+                        if (i < 6) {
                             createRow(table, row, i, gameID);
                             i++;
                         }
@@ -359,7 +370,7 @@
     }
 
     function getGameIDRanking(gameLogId) {
-        fetch('/api/gameLogs/'+gameLogId+'/ranking', {
+        fetch('/api/gameLogs/' + gameLogId + '/ranking', {
             method: 'GET',
         }).then(response => response.json())
             .then(function (data) {
