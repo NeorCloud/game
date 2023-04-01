@@ -2,6 +2,7 @@
 
 namespace App\Domains\Games\Http\Controllers;
 
+use App\Domains\Games\Events\Leaderboard;
 use App\Domains\Games\Http\Requests\StoreGameLogRequest;
 use App\Domains\Games\Http\Requests\UpdateGameLogRequest;
 use App\Domains\Games\Models\Game;
@@ -70,7 +71,7 @@ class GameAPIController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function edit($id)
@@ -86,17 +87,35 @@ class GameAPIController extends Controller
      */
     public function update(UpdateGameLogRequest $request, GameLog $log)
     {
+        $ranking1 = $log->game->logs()->orderBy('score', 'desc')->limit(10)->get();
         $this->gameLogService->update($log, [
             'score' => $request->score,
             'duration' => $request->duration,
         ]);
+        $ranking2 = $log->game->logs()->orderBy('score', 'desc')->limit(10)->get();
+
+        $flag = false;
+        if ($ranking1->count() < 10) {
+            $flag = true;
+        }
+        if ($ranking1->count() > 10) {
+            for ($i = 0; $i < 10; $i++) {
+                if ($ranking2[$i] != $ranking1[$i]) {
+                    $flag = true;
+                }
+            }
+        }
+        if ($flag) {
+            event(new Leaderboard($log->game));
+        }
+
         return response('log updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function destroy($id)

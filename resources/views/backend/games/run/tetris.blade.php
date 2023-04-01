@@ -79,6 +79,7 @@
 <div class="bottom-right">
     <div id="appVersion"></div>
 </div>
+<script src="{{url('/js/pusher.min.js')}}"></script>
 <script>
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -205,12 +206,12 @@
                     }
                 }
                 score++;
+                sendData(score);
             }
             else {
                 row--;
             }
         }
-        sendData(score);
 
         tetromino = getNextTetromino();
     }
@@ -394,7 +395,7 @@
             document.getElementById("div").style.display = 'none';
             document.getElementById("game").style.display = 'block';
             createGame();
-            setInterval(getTableData, 2000);
+            setTimeout(getTableData, 2000);
             rAF = requestAnimationFrame(loop);
         } else {
             alert('Enter Your Correct Nickname!Please!');
@@ -430,45 +431,7 @@
             method: 'GET',
         }).then(response => response.json())
             .then(function (data) {
-                var table = document.getElementById("tbody");
-                while (table.hasChildNodes()) {
-                    table.removeChild(table.firstChild);
-                }
-                var flag = false;
-                data.forEach(function (row) {
-                    if(row.id == gameID){
-                        flag = true;
-                    }
-                });
-                if(flag) {
-                    var i = 1;
-                    data.forEach(function (row) {
-                        createRow(table, row, i, gameID);
-                        i++;
-                    });
-                } else {
-                    var i = 1;
-                    data.forEach(function (row) {
-                        if(i < 6){
-                            createRow(table, row, i, gameID);
-                            i++;
-                        }
-                    });
-                    for (var i = 0; i < 3; i++) {
-                        var tr1 = document.createElement('tr');
-                        var dot = document.createElement('span');
-                        dot.innerHTML = '.';
-                        tr1.appendChild(dot);
-                        table.appendChild(tr1);
-                    }
-                    var row = {
-                        'id': gameID,
-                        'nickname': nickname,
-                        'score': score,
-                        'duration': duration,
-                    }
-                    createRow(table, row, gameRank, gameID);
-                }
+                makeTable(data);
             })
             .catch(function (exception) {
                 console.log('err in leaderboard')
@@ -481,10 +444,6 @@
         var tr = document.createElement('tr');
         var rank = document.createElement('td');
         rank.innerHTML = ranking;
-        if (row.id == game_id) {
-            tr.style.backgroundColor = '#ffc107';
-            tr.style.color = 'black';
-        }
         var id = document.createElement('td');
         id.innerHTML = row.id;
         var nickname = document.createElement('td');
@@ -495,6 +454,13 @@
         duration.innerHTML = row.duration;
         var created_at = document.createElement('td');
         created_at.innerHTML = row.created_at;
+        if (row.id == game_id) {
+            tr.style.backgroundColor = '#ffc107';
+            tr.style.color = 'black';
+            rank.id = 'player_rank';
+            score.id = 'player_score';
+            duration.id = 'player_duration';
+        }
         tr.appendChild(rank);
         tr.appendChild(id);
         tr.appendChild(nickname);
@@ -517,6 +483,7 @@
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
+            getGameIDRanking(gameID);
 
         }).catch(function (exception) {
             console.log(exception);
@@ -535,6 +502,14 @@
         }).then(response => response.json())
             .then(function (data) {
                 gameRank = data;
+                var player_rank = document.getElementById('player_rank');
+                var player_score = document.getElementById('player_score');
+                var player_duration = document.getElementById('player_duration');
+                if(player_rank != null) {
+                    player_rank.innerHTML = gameRank;
+                    player_score.innerHTML = score;
+                    player_duration.innerHTML = duration;
+                }
             })
             .catch(function (exception) {
                 console.log('err in ranking')
@@ -554,6 +529,59 @@
             console.log(exception);
         });
 
+    var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+        cluster: '{{env('PUSHER_APP_CLUSTER')}}',
+        encrypted: true
+    });
+
+    var channel = pusher.subscribe('games.'+3);
+    channel.bind('leaderboard', function(data) {
+        makeTable(data.body);
+    });
+
+    function makeTable(data) {
+        getGameIDRanking(gameID);
+
+        var table = document.getElementById("tbody");
+        while (table.hasChildNodes()) {
+            table.removeChild(table.firstChild);
+        }
+        var flag = false;
+        data.forEach(function (row) {
+            if(row.id == gameID){
+                flag = true;
+            }
+        });
+        if(flag) {
+            var i = 1;
+            data.forEach(function (row) {
+                createRow(table, row, i, gameID);
+                i++;
+            });
+        } else {
+            var i = 1;
+            data.forEach(function (row) {
+                if(i < 6){
+                    createRow(table, row, i, gameID);
+                    i++;
+                }
+            });
+            for (var i = 0; i < 3; i++) {
+                var tr1 = document.createElement('tr');
+                var dot = document.createElement('span');
+                dot.innerHTML = '.';
+                tr1.appendChild(dot);
+                table.appendChild(tr1);
+            }
+            var row = {
+                'id': gameID,
+                'nickname': nickname,
+                'score': score,
+                'duration': duration,
+            }
+            createRow(table, row, gameRank, gameID);
+        }
+    }
 </script>
 </body>
 </html>
