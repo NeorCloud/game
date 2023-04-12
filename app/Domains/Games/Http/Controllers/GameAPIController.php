@@ -97,8 +97,7 @@ class GameAPIController extends Controller
         $flag = false;
         if ($ranking1->count() < 10) {
             $flag = true;
-        }
-        if ($ranking1->count() > 10) {
+        } else {
             for ($i = 0; $i < 10; $i++) {
                 if ($ranking2[$i] != $ranking1[$i]) {
                     $flag = true;

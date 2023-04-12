@@ -1,5 +1,18 @@
 <?php
 
+if (env('PUSHER_HOST_ADDRESS') != null)
+    $options = [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+        'host' => env('PUSHER_HOST_ADDRESS','pusher.com'),
+        'port' => env('PUSHER_HOST_PORT','443'),
+        'scheme' => env('PUSHER_SCHEME','https')
+    ];
+else
+    $options = [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+//        'scheme' => env('PUSHER_SCHEME','https')
+    ];
+
 return [
 
     /*
@@ -29,16 +42,12 @@ return [
     */
 
     'connections' => [
-
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
-            'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
-            ],
+            'options' => $options,
         ],
 
         'ably' => [
@@ -58,7 +67,5 @@ return [
         'null' => [
             'driver' => 'null',
         ],
-
     ],
-
 ];

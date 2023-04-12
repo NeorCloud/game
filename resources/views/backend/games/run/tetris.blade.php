@@ -196,19 +196,18 @@
         }
 
         // check for line clears starting from the bottom and working our way up
-        for (let row = playfield.length - 1; row >= 0; ) {
+        for (let row = playfield.length - 1; row >= 0;) {
             if (playfield[row].every(cell => !!cell)) {
 
                 // drop every row above this one
                 for (let r = row; r >= 0; r--) {
                     for (let c = 0; c < playfield[r].length; c++) {
-                        playfield[r][c] = playfield[r-1][c];
+                        playfield[r][c] = playfield[r - 1][c];
                     }
                 }
                 score++;
                 sendData(score);
-            }
-            else {
+            } else {
                 row--;
             }
         }
@@ -251,39 +250,39 @@
     // @see https://tetris.fandom.com/wiki/SRS
     const tetrominos = {
         'I': [
-            [0,0,0,0],
-            [1,1,1,1],
-            [0,0,0,0],
-            [0,0,0,0]
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
         ],
         'J': [
-            [1,0,0],
-            [1,1,1],
-            [0,0,0],
+            [1, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0],
         ],
         'L': [
-            [0,0,1],
-            [1,1,1],
-            [0,0,0],
+            [0, 0, 1],
+            [1, 1, 1],
+            [0, 0, 0],
         ],
         'O': [
-            [1,1],
-            [1,1],
+            [1, 1],
+            [1, 1],
         ],
         'S': [
-            [0,1,1],
-            [1,1,0],
-            [0,0,0],
+            [0, 1, 1],
+            [1, 1, 0],
+            [0, 0, 0],
         ],
         'Z': [
-            [1,1,0],
-            [0,1,1],
-            [0,0,0],
+            [1, 1, 0],
+            [0, 1, 1],
+            [0, 0, 0],
         ],
         'T': [
-            [0,1,0],
-            [1,1,1],
-            [0,0,0],
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 0, 0],
         ]
     };
 
@@ -306,7 +305,7 @@
     // game loop
     function loop() {
         rAF = requestAnimationFrame(loop);
-        context.clearRect(0,0,canvas.width,canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
         // draw the playfield
         for (let row = 0; row < 20; row++) {
@@ -316,7 +315,7 @@
                     context.fillStyle = colors[name];
 
                     // drawing 1 px smaller than the grid creates a grid effect
-                    context.fillRect(col * grid, row * grid, grid-1, grid-1);
+                    context.fillRect(col * grid, row * grid, grid - 1, grid - 1);
                 }
             }
         }
@@ -343,7 +342,7 @@
                     if (tetromino.matrix[row][col]) {
 
                         // drawing 1 px smaller than the grid creates a grid effect
-                        context.fillRect((tetromino.col + col) * grid, (tetromino.row + row) * grid, grid-1, grid-1);
+                        context.fillRect((tetromino.col + col) * grid, (tetromino.row + row) * grid, grid - 1, grid - 1);
                     }
                 }
             }
@@ -351,7 +350,7 @@
     }
 
     // listen to keyboard events to move the active tetromino
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (gameOver) return;
 
         // left and right arrow keys (move)
@@ -374,7 +373,7 @@
         }
 
         // down arrow key (drop)
-        if(e.which === 40) {
+        if (e.which === 40) {
             const row = tetromino.row + 1;
 
             if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
@@ -497,7 +496,7 @@
     });
 
     function getGameIDRanking(gameLogId) {
-        fetch('/api/gameLogs/'+gameLogId+'/ranking', {
+        fetch('/api/gameLogs/' + gameLogId + '/ranking', {
             method: 'GET',
         }).then(response => response.json())
             .then(function (data) {
@@ -505,7 +504,7 @@
                 var player_rank = document.getElementById('player_rank');
                 var player_score = document.getElementById('player_score');
                 var player_duration = document.getElementById('player_duration');
-                if(player_rank != null) {
+                if (player_rank != null) {
                     player_rank.innerHTML = gameRank;
                     player_score.innerHTML = score;
                     player_duration.innerHTML = duration;
@@ -529,13 +528,24 @@
             console.log(exception);
         });
 
+    var tls = true;
+    if ("{{env('PUSHER_SCHEME')}}" == "http")
+        tls = false;
+    if ("{{env('PUSHER_SCHEME')}}" == "https")
+        tls = true;
+
     var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+        useTLS: tls,
+        forceTLS: tls,
+        wsHost: "{{env('PUSHER_HOST_ADDRESS', 'sockjs.pusher.com')}}",
+        wsPort: {{env('PUSHER_HOST_PORT', '443')}},
         cluster: '{{env('PUSHER_APP_CLUSTER')}}',
-        encrypted: true
+        encrypted: false,
+        wsPath: '{{env('PUSHER_PATH', '/pusher')}}',
     });
 
-    var channel = pusher.subscribe('games.'+3);
-    channel.bind('leaderboard', function(data) {
+    var channel = pusher.subscribe('games.' + 3);
+    channel.bind('leaderboard', function (data) {
         makeTable(data.body);
     });
 
@@ -548,11 +558,11 @@
         }
         var flag = false;
         data.forEach(function (row) {
-            if(row.id == gameID){
+            if (row.id == gameID) {
                 flag = true;
             }
         });
-        if(flag) {
+        if (flag) {
             var i = 1;
             data.forEach(function (row) {
                 createRow(table, row, i, gameID);
@@ -561,7 +571,7 @@
         } else {
             var i = 1;
             data.forEach(function (row) {
-                if(i < 6){
+                if (i < 6) {
                     createRow(table, row, i, gameID);
                     i++;
                 }

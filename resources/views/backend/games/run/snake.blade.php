@@ -345,7 +345,7 @@
                 var player_rank = document.getElementById('player_rank');
                 var player_score = document.getElementById('player_score');
                 var player_duration = document.getElementById('player_duration');
-                if(player_rank != null) {
+                if (player_rank != null) {
                     player_rank.innerHTML = gameRank;
                     player_score.innerHTML = eaten;
                     player_duration.innerHTML = duration;
@@ -369,17 +369,28 @@
             console.log(exception);
         });
 
+    var tls = true;
+    if ("{{env('PUSHER_SCHEME')}}" == "http")
+        tls = false;
+    if ("{{env('PUSHER_SCHEME')}}" == "https")
+        tls = true;
+
     var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+        useTLS: tls,
+        forceTLS: tls,
+        wsHost: "{{env('PUSHER_HOST_ADDRESS', 'sockjs.pusher.com')}}",
+        wsPort: {{env('PUSHER_HOST_PORT', '443')}},
         cluster: '{{env('PUSHER_APP_CLUSTER')}}',
-        encrypted: true
+        encrypted: false,
+        wsPath: '{{env('PUSHER_PATH', '/pusher')}}',
     });
 
-    var channel = pusher.subscribe('games.'+1);
-    channel.bind('leaderboard', function(data) {
+    var channel = pusher.subscribe('games.' + 1);
+    channel.bind('leaderboard', function (data) {
         makeTable(data.body);
     });
 
-    function makeTable(data){
+    function makeTable(data) {
         getGameIDRanking(gameID);
 
         var table = document.getElementById("tbody");
