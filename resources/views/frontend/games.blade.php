@@ -89,11 +89,21 @@
         @endauth
     </div><!--top-right-->
 
-    <div class="content">
+    <div class="content" dir="ltr">
         @include('includes.partials.messages')
 
+        <h2>Usual Games</h2>
         <ul>
-            @foreach ($games as $game)
+            @foreach ($games->where('id','<',10) as $game)
+                <li><a href="{{route('frontend.games.run',$game->id)}}"
+                       style="color: #636b6f; text-transform: uppercase">{{$game->title}}</a></li>
+            @endforeach
+        </ul>
+        @if($games->count() > 9)
+            <h2>Kid Games</h2>
+        @endif
+        <ul>
+            @foreach ($games->where('id','>',9) as $game)
                 <li><a href="{{route('frontend.games.run',$game->id)}}"
                        style="color: #636b6f; text-transform: uppercase">{{$game->title}}</a></li>
             @endforeach

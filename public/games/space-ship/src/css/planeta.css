@@ -1,0 +1,288 @@
+.planetarea {
+    margin-left: 244px;
+    width: 370px;
+    height: inherit;
+}
+
+.planeta {
+    width: inherit;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+}
+
+.in {
+    animation: planetIn 2s linear;
+}
+
+@keyframes planetIn {
+    0% {
+        margin-left: 460px
+    }
+
+    100% {
+        margin-left: -90px
+    }
+}
+
+.planeta img {
+    width: 50%;
+    margin-left: 460px;
+}
+
+.planeta-info {
+    position: absolute;
+    height: 450px;
+    margin: -450px 0 0 0px;
+    width: 370px;
+    display: flex;
+    align-items: center;
+    font-family: retro_;
+}
+
+.info {
+    width: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.info-pointer {
+    display: flex;
+    height: fit-content;
+    align-items: center;
+}
+
+.pointer-circle {
+    height: 3px;
+    width: 3px;
+    border: 4px rgb(62, 236, 39) solid;
+    border-radius: 100%;
+    background: rgb(62, 236, 39);
+    animation: .3s point cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+
+
+@keyframes point {
+    0% {
+        border: 0px rgb(62, 236, 39) solid;
+    }
+
+    100% {
+        border: 4px rgb(62, 236, 39) solid;
+    }
+}
+
+.close-circle {
+    animation: closeCircle 3s;
+}
+
+@keyframes closeCircle {
+    0% {
+        border: 4px rgb(62, 236, 39) solid;
+    }
+
+    66% {
+        border: 4px rgb(62, 236, 39) solid;
+    }
+
+    100% {
+        border: 0px rgb(62, 236, 39) solid;
+    }
+}
+
+.pointer-arrow {
+    height: 3px;
+    width: 100px;
+    background: rgb(62, 236, 39);
+    margin-left: -2px;
+    animation: 1s arrow cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+
+@keyframes arrow {
+    0% {
+        width: 0px
+    }
+
+    50% {
+        width: 0px
+    }
+
+    100% {
+        width: 100px
+    }
+}
+
+.close-arrow {
+    animation: 3s closeArrow;
+}
+
+@keyframes closeArrow {
+    0% {
+        width: 100px
+    }
+
+    33% {
+        width: 100px
+    }
+
+    100% {
+        width: 0
+    }
+}
+
+.info-box {
+    height: 331px;
+    width: 235px;
+    background: lime;
+    padding: 5px;
+    text-align: center;
+    border-radius: 8px;
+    animation: 2s infobox cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+
+@keyframes infobox {
+    0% {
+        width: 0px;
+        padding: 0px;
+    }
+
+    50% {
+        width: 0px;
+        padding: 0px;
+    }
+
+    100% {
+        padding: 235px;
+        padding: 5px;
+    }
+
+}
+
+.close-box {
+    animation: 3s closeBox
+}
+
+@keyframes closeBox {
+    0% {
+        padding: 235px;
+        padding: 5px;
+    }
+
+    33% {
+        width: 0px;
+        padding: 0px;
+    }
+
+    100% {
+        width: 0px;
+        padding: 0px;
+    }
+}
+
+@font-face {
+    font-family: vcr_;
+    src: url("../VCR_OSD_MONO.ttf");
+}
+
+.info-box>* {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    border: 4px solid black;
+    animation: 3s infobox-content linear;
+    font-family: vcr_;
+}
+
+@keyframes infobox-content {
+    0% {
+        opacity: 0%;
+    }
+
+    33.3% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.info-title {
+    width: 228px;
+    height: 38px;
+    font-weight: 100;
+}
+
+.info-size {
+    font-size: 0.8em;
+    width: 228px;
+    height: 40px;
+    font-weight: 100;
+}
+
+
+.info-text {
+    font-size: 0.8em;
+    width: 228px;
+    height: 180px;
+    font-weight: 100;
+    flex-direction: column;
+}
+
+.info-text p {
+    width: 90%;
+    text-align: justify;
+}
+
+.info-continuar {
+    margin: 8px auto;
+    border: 4px solid black;
+    width: 186px;
+    height: 30px;
+    background: transparent;
+    font-family: inherit;
+}
+
+.info-continuar:hover {
+    cursor: pointer;
+    background: black;
+    color: rgb(62, 236, 39);
+}
+
+.analisar {
+    font-family: retro_;
+    color: rgb(62, 236, 39);
+    position: absolute;
+    margin: 10px 0 0 calc((-170px + 4px) / 2);
+    width: 170px;
+    height: fit-content;
+    text-align: center;
+}
+
+.analisar img {
+    width: 110px;
+}
+
+.barra-analise {
+    margin-top: -4px;
+    position: absolute;
+    width: 700px;
+    height: 4px;
+    background: rgb(62, 236, 39);
+    animation: barra-analise 2s linear;
+}
+
+@keyframes barra-analise {
+    0% {
+        margin-top: -4px;
+    }
+
+    50% {
+        margin-top: 450px
+    }
+
+    100% {
+        margin-top: -10px;
+    }
+}

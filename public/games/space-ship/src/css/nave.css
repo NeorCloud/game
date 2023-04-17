@@ -1,0 +1,103 @@
+.ship {
+    width: fit-content;
+    display: flex;
+    align-self: center;
+    top: 0;
+    left: 209px;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.ally {
+    position: relative;
+    animation: 3s gamestart;
+    z-index: 2;
+}
+
+.enemy {
+    transform: scaleX(-1);
+}
+
+@keyframes gamestart {
+    0% {
+        left: -130px;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 100;
+    }
+
+    100% {
+        left: 209px;
+    }
+}
+
+.gun {
+    display: flex;
+}
+
+.tiro {
+    opacity: 0;
+    z-index: 1;
+    position: relative;
+    height: 3px;
+    width: 10px;
+    background: lime;
+    align-self: center;
+}
+
+.tiroInimigo {
+    background: orangered;
+    height: 3px;
+    width: 10px;
+    left: 10px;
+    z-index: -1;
+    position: absolute;
+    align-self: center;
+}
+
+.untarget{
+    animation: 6s untarget linear;
+}
+
+@keyframes untarget {
+    0%{
+        opacity: 0%;
+    }
+    10%{
+        opacity: 100%;
+    }
+    20%{
+        opacity: 0%;
+    }
+    30%{
+        opacity: 100%;
+    }
+    40%{
+        opacity: 0%;
+    }
+    50%{
+        opacity: 100%;
+    }
+    60%{
+        opacity: 0%;
+    }
+    70%{
+        opacity: 100%;
+    }
+    80%{
+        opacity: 0%;
+    }
+    90%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 100%;
+    }
+
+}

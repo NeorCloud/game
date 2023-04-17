@@ -1,0 +1,30 @@
+* {
+    margin: 0px;
+    border: 0;
+}
+
+@font-face {
+    font-family: "retro_";
+    src: url("../retro-thing.ttf");
+}
+
+html{
+    cursor: url("../img/cursor.png"), auto;
+    overflow: hidden;
+}
+
+body {
+    background: black;
+}
+
+#comecar {
+    width: 100%;
+    margin-top: 300px;
+    text-align: center;
+    color: white;
+    font-family: "retro_";
+}
+#comecar img{
+    width: 85px;
+    margin-bottom: -5px;
+}

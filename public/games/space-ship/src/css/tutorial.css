@@ -1,0 +1,29 @@
+.tutorial {
+    height: inherit;
+    width: inherit;
+    position: absolute;
+    z-index: 1;
+    animation: aparecer 1s;
+}
+
+@keyframes aparecer {
+    0% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+._1 {
+    background-image: url("../img/tutorial_1.png");
+}
+
+._2 {
+    background-image: url("../img/tutorial_2.png")
+}
+
+._3{
+    background-image: url("../img/tutorial_3.png");
+}

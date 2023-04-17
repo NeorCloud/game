@@ -1,0 +1,73 @@
+.nav-header {
+    margin: 125px auto -125px;
+    width: 700px;
+    height: 45px;
+    display: flex;
+    justify-content: space-between;
+    animation: aparece 3s;
+    z-index: 1;
+    position: relative;
+}
+
+.left {
+    width: fit-content;
+    display: flex;
+}
+
+.volume-container {
+    display: flex;
+}
+
+.nav-header a * {
+    height: 35px;
+    width: 35px;
+}
+
+.nav-header-item {
+    height: inherit;
+    cursor: url("../img/pointer.png"), auto;
+}
+
+.nav-header-item:first-of-type {
+    margin-right: 10px
+}
+
+.git {
+    float: right
+}
+
+@keyframes aparece {
+    0% {
+        opacity: 0%;
+    }
+
+    75% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.volume-container input {
+    display: none;
+}
+
+input {
+    margin-top: -10px;
+    cursor: url("../img/pointer.png"), auto;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: rgb(243, 243, 243);
+    width: 300px !important;
+    border-radius: 10px;
+    height: 7px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -4px;
+}

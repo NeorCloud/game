@@ -1,0 +1,73 @@
+ @font-face {
+    font-family: 'retro_';
+    src: url("../retro-thing.ttf");
+ }
+
+ body{
+    overflow-x: hidden;
+    background: black;
+    margin: 0;
+    font-family: 'retro_';
+    color: white
+ }
+ .janela {
+     margin: 10em auto;
+     width: 750px;
+     height: 500px;
+     /* background: red; */
+     position: relative;
+     overflow-x: hidden;
+     border: 8px solid rgb(91 213 91);
+     border-radius: 10px;
+     background-image: url("../img/stars.jpg");
+     background-size: 90%;
+     background-color: rgba(0, 212, 64, 0.322);
+ }
+
+.planetas{
+    display: flex;
+}
+
+ .planeta {
+     width: 750px;
+     height: 500px;
+     position: absolute;
+     background-repeat: no-repeat;
+     background-position: center;
+     background-size: 65%;
+     background-color: rgba(0,0,0,0.4)
+ }
+
+ ._1{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+ ._2{
+    background-image: url("../planetas/2_venus.svg");
+ }
+ ._3{
+    background-image: url("../planetas/3_terra.svg");
+ }
+ ._4{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+ ._5{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+ ._6{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+ ._7{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+ ._8{
+    background-image: url("../planetas/1_mercurio.svg");
+ }
+
+
+
+ .posterior{
+    margin-left: 750px;
+ }
+ .anterior{
+    margin-left: -750px;
+ }

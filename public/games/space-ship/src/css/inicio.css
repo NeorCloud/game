@@ -1,0 +1,42 @@
+.inicio{
+    height: inherit;
+    width: inherit;
+    display: flex;
+    overflow: hidden;
+}
+
+.conteudo-inicio{
+    margin: auto -415px;
+    width: fit-content;
+    text-align: center;
+}
+
+.conteudo-inicio img{
+    width: 440px;
+}
+
+.conteudo-inicio button{
+    padding: 13px 35px;
+    font-family: retro_;
+    font-size: 26px;
+    cursor: url("../img/pointer.png"), auto;
+}
+
+.conteudo-inicio button:hover{
+    background: rgb(53, 53, 53);
+    color: white;
+    transition: .2s;
+}
+
+.some{
+    animation: some 0.5s;
+}
+
+@keyframes some{
+    0%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
