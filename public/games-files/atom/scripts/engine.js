@@ -219,7 +219,7 @@ function main(){
 	document.body.appendChild(canvas);
 
 	img = new Image();
-	img.src = "/games/atom/sprites/images.png";
+	img.src = "/games-files/atom/sprites/images.png";
 
     GameStatus = Status.start;
 	play();
