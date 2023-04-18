@@ -19,7 +19,7 @@ class Inicio {
     static elementos_jquery = `
     <div class="inicio" style="display: none">
         <div class="conteudo-inicio">
-            <img src="/games/space-ship/src/img/logo.png" alt="">
+            <img src="/games-files/space-ship/src/img/logo.png" alt="">
             <br>
             <button>Iniciar</button>
         </div>

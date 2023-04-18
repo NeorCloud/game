@@ -19,17 +19,17 @@ class Navegacao {
     <section class="nav-header">
         <div class="left">
             <a href="" class="nav-header-item home">
-                <img src="/games/space-ship/src/img/home.png">
+                <img src="/games-files/space-ship/src/img/home.png">
             </a>
             <div class="volume-container">
                 <a class="nav-header-item volume">
-                    <img src="/games/space-ship/src/img/volume_1.png" alt="">
+                    <img src="/games-files/space-ship/src/img/volume_1.png" alt="">
                 </a>
                 <input type="range" min="0" max="100" value="5">
             </div>
         </div>
         <div class="right">
-            <a href="https://github.com/FabioV37ga/Sistema-Solar" class="nav-header-item git"><img src="/games/space-ship/src/img/git.svg" alt=""></a>
+            <a href="https://github.com/FabioV37ga/Sistema-Solar" class="nav-header-item git"><img src="/games-files/space-ship/src/img/git.svg" alt=""></a>
         </div>
     </section>
     `;

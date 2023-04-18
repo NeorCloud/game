@@ -33,7 +33,7 @@ class NaveInimiga {
     `;
     static elemento_jquery_nave = `
     <div class="ship enemy">
-        <img src="/games/space-ship/src/img/ship-enemy.png" value="1">
+        <img src="/games-files/space-ship/src/img/ship-enemy.png" value="1">
     </div>`
     static audio = new Audio('/games/space-ship/src/sound/boom.wav')
     static audioGun = new Audio('/games/space-ship/src/sound/shootEnemy.mp3')

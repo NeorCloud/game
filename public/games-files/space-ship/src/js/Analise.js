@@ -20,7 +20,7 @@ class Analise {
                 var botaoAnalise = `
                 <div class="analisar">
                             <p>Aperte</p>
-                            <img src="/games/space-ship/src/img/espaco_verde.png" alt="">
+                            <img src="/games-files/space-ship/src/img/espaco_verde.png" alt="">
                             <p>para analisar <br> o planeta.</p>
                         </div>
                 `

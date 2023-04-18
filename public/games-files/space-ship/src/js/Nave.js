@@ -22,7 +22,7 @@ classe Nave
 */
 class Nave {
     static elemento_jquery = `
-    <div class = "ship ally"><img src="/games/space-ship/src/img/ship-ally.png" alt=""></div>
+    <div class = "ship ally"><img src="/games-files/space-ship/src/img/ship-ally.png" alt=""></div>
     `;
 
     // Elementos visuais
